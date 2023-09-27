@@ -15,6 +15,10 @@
       .openseadragon-canvas {
         outline: none;
       }
+
+      .a9s-osd-textlayer {
+        color: rgba(0, 0, 0, 0.6);
+      }
     </style>
   </head>
 
@@ -22,7 +26,13 @@
     <div id="openseadragon"></div>
 
     <script type='module'>
-      import { OpenSeadragon, Annotorious, parseALTO } from './index.ts';
+      import { 
+        OpenSeadragon, 
+        Annotorious, 
+        parseALTO, 
+        addTextLayer,
+        transcriptionLabel
+      } from './index.ts';
 
       window.onload = function() {
         var viewer = OpenSeadragon({
@@ -43,11 +53,14 @@
 
         var anno = Annotorious(viewer, { adapter: null });
 
+        var textlayer = addTextLayer(anno, {
+          label: transcriptionLabel
+        });
+
         fetch('alto-sample.xml')
           .then(res => res.text())
           .then(xml => {
             const annotations = parseALTO(xml);
-            console.log(annotations);
             anno.setAnnotations(annotations);
           });
       }

@@ -46,7 +46,7 @@
     "vite-plugin-dts": "^2.2.0"
   },
   "peerDependencies": {
-    "@annotorious/openseadragon": "^3.0.0-pre-alpha-46",
+    "@annotorious/openseadragon": "file:../../../annotorious-v3/packages/annotorious-openseadragon",
     "openseadragon": "^3.0.0 || ^4.0.0"
   }
 }

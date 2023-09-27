@@ -21,7 +21,7 @@ export default defineConfig({
     sourcemap: true,
     lib: {
       entry: './src/index.ts',
-      name: 'AnnotoriousTextLayer',
+      name: 'AnnotoriousOSDTextLayer',
       formats: ['es', 'umd'],
       fileName: (format) => `annotorious-openseadragon-textlayer.${format}.js`
     },
