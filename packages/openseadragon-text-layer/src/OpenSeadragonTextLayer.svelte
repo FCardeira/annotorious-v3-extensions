@@ -80,5 +80,6 @@
 <style>
   div {
     transform-origin: 0 0;
+    pointer-events: none;
   }
 </style>
