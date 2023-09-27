@@ -13,6 +13,9 @@
     "test": "npm run test --workspaces"
   },
   "workspaces": [
-    "./packages/openseadragon-textlayer"
-  ]
+    "./packages/openseadragon-text-layer"
+  ],
+  "devDependencies": {
+    "@types/node": "^20.7.0"
+  }
 }
