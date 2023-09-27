@@ -1,0 +1,18 @@
+{
+  "name": "@annotorious/extensions-monorepo",
+  "version": "3.0.0-pre-alpha-01",
+  "description": "Annotorious Extensions Monorepo",
+  "author": "Rainer Simon",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/annotorious/annotorious-extensions.git"
+  },
+  "license": "BSD-3-Clause",
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "test": "npm run test --workspaces"
+  },
+  "workspaces": [
+    "./packages/openseadragon-textlayer"
+  ]
+}
