@@ -19,14 +19,18 @@
   class="annotation"
   style={`left:${left}px; top:${top}px; transform: scale(${1 / scale})`}>
   <span bind:this={ref}>
-    { opts.label(annotation) }
-  </span>
+    {opts.label(annotation)}
+  </span>&nbsp;<!-- ensures spaces between words on copy and paste! -->
 </div>   
 
 <style>
   div.annotation {
     transform-origin: 0 0;
     position: absolute;
+  }
+
+  div.annotation span {
+    display:inline-block;
     font-size: 14px;
     background-color: rgba(255, 255, 255, 0.8);
     padding: 3px 6px;
