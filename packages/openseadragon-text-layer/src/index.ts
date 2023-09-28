@@ -10,6 +10,10 @@ export interface TextLayerOpts {
 
   label(annotation: ImageAnnotation): string | undefined;
 
+  mode: 'fillBounds' | 'fixedSize';
+
+  position: 'topleft' | 'bottomleft';
+
 }
 
 export const addTextLayer = (anno: AnnotoriousOpenSeadragonAnnotator, opts: TextLayerOpts) => {

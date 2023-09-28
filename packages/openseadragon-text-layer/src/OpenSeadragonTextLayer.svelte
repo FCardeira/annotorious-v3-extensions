@@ -1,8 +1,9 @@
 <script type="ts">
   import type { ImageAnnotation, ImageAnnotatorState } from '@annotorious/openseadragon';
   import { onMount } from 'svelte';
-  import ScaledText from './OpenSeadragonScaledText.svelte';
   import type { TextLayerOpts } from '.';
+  import FillBoundsLabel from './FillBoundsLabel.svelte';
+  import FixedSizeLabel from './FixedSizeLabel.svelte';
     
   /** props **/
   export let state: ImageAnnotatorState;
@@ -71,9 +72,10 @@
   style={`transform:${transform}; width: ${offsetWidth / 0.11}px; height: ${offsetHeight / 0.11}px`}
   class="a9s-annotationlayer a9s-osd-textlayer">
   {#each annotations as annotation}
-    <ScaledText 
+    <FixedSizeLabel 
       annotation={annotation} 
-      opts={opts} />
+      opts={opts} 
+      scale={scale} />
   {/each}
 </div>
 
