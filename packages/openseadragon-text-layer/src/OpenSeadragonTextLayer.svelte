@@ -2,7 +2,7 @@
   import type { ImageAnnotation, ImageAnnotatorState } from '@annotorious/openseadragon';
   import { onMount } from 'svelte';
   import type { TextLayerOpts } from '.';
-  import FillBoundsLabel from './FillBoundsLabel.svelte';
+  // import FillBoundsLabel from './FillBoundsLabel.svelte';
   import FixedSizeLabel from './FixedSizeLabel.svelte';
     
   /** props **/
