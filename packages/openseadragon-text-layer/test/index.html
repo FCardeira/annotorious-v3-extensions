@@ -30,7 +30,7 @@
         OpenSeadragon, 
         Annotorious, 
         parseALTO, 
-        addTextLayer,
+        mountExtension,
         transcriptionLabel
       } from './index.ts';
 
@@ -53,7 +53,7 @@
 
         var anno = Annotorious(viewer, { adapter: null });
 
-        var textlayer = addTextLayer(anno, {
+        var textlayer = mountExtension(anno, {
           label: transcriptionLabel
         });
 
