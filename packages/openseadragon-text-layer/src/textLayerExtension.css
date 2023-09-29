@@ -4,8 +4,15 @@
 }
 
 .a9s-annotationlayer.a9s-osd-textlayer .annotation {
-  transform-origin: 0 0;
   position: absolute;
+}
+
+.a9s-annotationlayer.a9s-osd-textlayer.topleft .annotation {
+  transform-origin: 0 bottom;
+}
+
+.a9s-annotationlayer.a9s-osd-textlayer.bottomleft .annotation {
+  transform-origin: 0 0;
 }
 
 .a9s-annotationlayer.a9s-osd-textlayer.fixed-size .annotation span {

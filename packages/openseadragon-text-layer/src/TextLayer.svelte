@@ -17,7 +17,9 @@
 
   let annotations: ImageAnnotation[] = [];
 
-  const { offsetWidth, offsetHeight } = viewer.canvas;
+  let width: number;
+
+  let height: number;
 
   const redraw = () => {
     const viewportBounds = viewer.viewport.viewportToImageRectangle(viewer.viewport.getBounds(true));
@@ -54,9 +56,17 @@
   }
 
   onMount(() => {
+    const onOpen = () => {
+      const { x, y } = viewer.world.getItemAt(0).source.dimensions;
+      width = x;
+      height = y;
+    }
+
+    viewer.addHandler('open', onOpen);
     viewer.addHandler('update-viewport', redraw);
 
     return () => {
+      viewer.removeHandler('open', onOpen);
       viewer.removeHandler('update-viewport', redraw);
     }
   });
@@ -68,13 +78,16 @@
 </script>
 
 <div 
-  style={`transform:${transform}; width: ${offsetWidth / 0.11}px; height: ${offsetHeight / 0.11}px`}
+  style={`transform:${transform}; width: ${width}px; height: ${height}px`}
   class="a9s-annotationlayer a9s-osd-textlayer"
   class:fixed-size={opts.mode !== 'fillBounds'}
-  class:fill-bounds={opts.mode === 'fillBounds'}>
+  class:fill-bounds={opts.mode === 'fillBounds'}
+  class:bottomleft={opts.position !== 'topleft'}
+  class:topleft={opts.position === 'topleft'}>
   {#if opts.mode !== 'fillBounds'}
     {#each annotations as annotation}
       <FixedSizeLabel 
+        imageSize={[width, height]}
         annotation={annotation} 
         opts={opts} 
         scale={scale} />
