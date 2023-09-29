@@ -1,5 +1,5 @@
 <script type="ts">
-  import type { ImageAnnotation, ImageAnnotatorState } from '@annotorious/openseadragon';
+  import type { ImageAnnotation, ImageAnnotatorState, StoreChangeEvent } from '@annotorious/openseadragon';
   import { onMount } from 'svelte';
   import { FillBoundsLabel, FixedSizeLabel } from './Label';
   import type { TextLayerOpts } from './TextLayerOpts';
@@ -65,8 +65,7 @@
 
     viewer.addHandler('update-viewport', redraw);
 
-    // @ts-ignore
-    const onStoreChange = ((event: StoreChangeEvent) => {
+    const onStoreChange = ((event: StoreChangeEvent<ImageAnnotation>) => {
       annotations = event.state;
       redraw();
     });
