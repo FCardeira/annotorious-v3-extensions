@@ -4,6 +4,10 @@
     <meta charset='utf-8' />
     <title>Annotorious OpenSeadragon Textlayer</title>
     <script src="https://cdn.jsdelivr.net/npm/openseadragon@4.1.0/build/openseadragon/openseadragon.min.js"></script>
+    <script src="annotorious-openseadragon.umd.js"></script>
+    <script src="annotorious-openseadragon-textlayer.umd.js"></script>
+    <link rel="stylesheet" href="annotorious-openseadragon.css">
+    <link rel="stylesheet" href="annotorious-openseadragon-textlayer.css">
     <style>
       html, body, #openseadragon {
         margin: 0;
@@ -33,12 +37,7 @@
 
     <button id="toggle">Toggle Layer</button>
 
-    <script type="module">
-      import { Annotorious } from '@annotorious/openseadragon';
-      import { mountExtension, transcriptionLabel } from '../src';
-
-      import '@annotorious/openseadragon/annotorious-openseadragon.css';
-
+    <script>
       window.onload = function() {
         var viewer = OpenSeadragon({
           id: 'openseadragon',
@@ -56,16 +55,17 @@
           }]        
         });
 
-        var anno = Annotorious(viewer, { adapter: null });
 
-        var textlayer = mountExtension(anno, {
-          label: transcriptionLabel
+        var anno = Annotorious.Annotorious(viewer, { adapter: null });
+
+        var textlayer = OSDTextLayer.mountExtension(anno, {
+          label: OSDTextLayer.transcriptionLabel
         });
 
         textlayer.loadOCR('alto-sample.xml');
 
         document.getElementById('toggle').addEventListener('click', () => {
-          textLayer.setVisible(!textLayer.isVisible());
+          textlayer.setVisible(!textlayer.isVisible());
         });
       }
     </script>
