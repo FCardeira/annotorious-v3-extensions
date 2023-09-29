@@ -8,6 +8,7 @@
   export let state: ImageAnnotatorState;
   export let viewer: OpenSeadragon.Viewer;
   export let opts: TextLayerOpts;
+  export let visible: boolean = true;
 
   const { store } = state;
 
@@ -65,38 +66,45 @@
     viewer.addHandler('open', onOpen);
     viewer.addHandler('update-viewport', redraw);
 
+    // @ts-ignore
+    const onStoreChange = ((event: StoreChangeEvent) => {
+      annotations = event.state;
+      redraw();
+    });
+
+    store.observe(onStoreChange);
+
     return () => {
       viewer.removeHandler('open', onOpen);
       viewer.removeHandler('update-viewport', redraw);
-    }
-  });
 
-  store.observe(event => {
-    annotations = event.state;
-    redraw();
+      store.unobserve(onStoreChange);
+    }
   });
 </script>
 
-<div 
-  style={`transform:${transform}; width: ${width}px; height: ${height}px`}
-  class="a9s-annotationlayer a9s-osd-textlayer"
-  class:fixed-size={opts.mode !== 'fillBounds'}
-  class:fill-bounds={opts.mode === 'fillBounds'}
-  class:bottomleft={opts.position !== 'topleft'}
-  class:topleft={opts.position === 'topleft'}>
-  {#if opts.mode !== 'fillBounds'}
-    {#each annotations as annotation}
-      <FixedSizeLabel 
-        imageSize={[width, height]}
-        annotation={annotation} 
-        opts={opts} 
-        scale={scale} />
-    {/each}
-  {:else}
-    {#each annotations as annotation}
-      <FillBoundsLabel 
-        annotation={annotation} 
-        opts={opts} />
-    {/each}
-  {/if}
-</div>
+{#if visible}
+  <div 
+    style={`transform:${transform}; width: ${width}px; height: ${height}px`}
+    class="a9s-annotationlayer a9s-osd-textlayer"
+    class:fixed-size={opts.mode !== 'fillBounds'}
+    class:fill-bounds={opts.mode === 'fillBounds'}
+    class:bottomleft={opts.position !== 'topleft'}
+    class:topleft={opts.position === 'topleft'}>
+    {#if opts.mode !== 'fillBounds'}
+      {#each annotations as annotation}
+        <FixedSizeLabel 
+          imageSize={[width, height]}
+          annotation={annotation} 
+          opts={opts} 
+          scale={scale} />
+      {/each}
+    {:else}
+      {#each annotations as annotation}
+        <FillBoundsLabel 
+          annotation={annotation} 
+          opts={opts} />
+      {/each}
+    {/if}
+  </div>
+{/if}

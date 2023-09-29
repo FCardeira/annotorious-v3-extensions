@@ -19,11 +19,19 @@
       .a9s-osd-textlayer {
         color: rgba(0, 0, 0, 0.6);
       }
+
+      button {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+      }
     </style>
   </head>
 
   <body>
     <div id="openseadragon"></div>
+
+    <button id="toggle">Toggle Layer</button>
 
     <script type='module'>
       import { 
@@ -53,7 +61,7 @@
 
         var anno = Annotorious(viewer, { adapter: null });
 
-        var textlayer = mountExtension(anno, {
+        var textLayer = mountExtension(anno, {
           label: transcriptionLabel
         });
 
@@ -63,6 +71,10 @@
             const annotations = parseALTO(xml);
             anno.setAnnotations(annotations);
           });
+
+        document.getElementById('toggle').addEventListener('click', () => {
+          textLayer.setVisible(!textLayer.isVisible());
+        });
       }
     </script>
   </body>
