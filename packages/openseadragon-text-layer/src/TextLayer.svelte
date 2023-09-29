@@ -3,6 +3,7 @@
   import { onMount } from 'svelte';
   import { FillBoundsLabel, FixedSizeLabel } from './Label';
   import type { TextLayerOpts } from './TextLayerOpts';
+  import { getImageDimensions } from './ImageDimensions';
     
   /** props **/
   export let state: ImageAnnotatorState;
@@ -57,13 +58,11 @@
   }
 
   onMount(() => {
-    const onOpen = () => {
-      const { x, y } = viewer.world.getItemAt(0).source.dimensions;
-      width = x;
-      height = y;
-    }
+    getImageDimensions(viewer).then(dimensions => {
+      width = dimensions.width;
+      height = dimensions.height;
+    });
 
-    viewer.addHandler('open', onOpen);
     viewer.addHandler('update-viewport', redraw);
 
     // @ts-ignore
@@ -75,7 +74,6 @@
     store.observe(onStoreChange);
 
     return () => {
-      viewer.removeHandler('open', onOpen);
       viewer.removeHandler('update-viewport', redraw);
 
       store.unobserve(onStoreChange);
