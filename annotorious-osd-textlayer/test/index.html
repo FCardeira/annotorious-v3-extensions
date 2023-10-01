@@ -34,7 +34,7 @@
     <button id="toggle">Toggle Layer</button>
 
     <script type="module">
-      import { Annotorious } from '@annotorious/openseadragon';
+      import { createOSDAnnotator } from '@annotorious/openseadragon';
       import { mountExtension, transcriptionLabel } from '../src';
 
       import '@annotorious/openseadragon/annotorious-openseadragon.css';
@@ -56,7 +56,7 @@
           }]        
         });
 
-        var anno = Annotorious(viewer, { adapter: null });
+        var anno = createOSDAnnotator(viewer, { adapter: null });
 
         var textlayer = mountExtension(anno, {
           label: transcriptionLabel

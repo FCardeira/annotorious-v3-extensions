@@ -1,4 +1,4 @@
-import type { AnnotoriousOpenSeadragonAnnotator, ImageAnnotation, ImageAnnotatorState } from '@annotorious/openseadragon';
+import type { OpenSeadragonAnnotator, ImageAnnotation, ImageAnnotatorState } from '@annotorious/openseadragon';
 import { parseALTO, type PageMetadata } from '@annotorious/formats';
 import OpenSeadragonTextLayer from './TextLayer.svelte';
 import type { TextLayerOpts } from './TextLayerOpts';
@@ -8,7 +8,7 @@ import type { OCRFormat } from '.';
 import './textLayerExtension.css';
 
 export const mountExtension = (
-  anno: AnnotoriousOpenSeadragonAnnotator<ImageAnnotation>, 
+  anno: OpenSeadragonAnnotator<ImageAnnotation>, 
   opts: TextLayerOpts
 ) => {
 
