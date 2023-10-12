@@ -51,7 +51,9 @@
           console.log('deleted', annotation);
         });
 
-        anno.addDrawingTool('ellipse', 'ELLIPSE', RubberbandEllipse, EllipseEditor);
+        anno.registerDrawingTool('ellipse', RubberbandEllipse);
+
+        anno.registerShapeEditor('ELLIPSE', EllipseEditor);
 
         console.log('setting drawing tool');
         anno.setDrawingTool('ellipse');

@@ -1,10 +1,8 @@
 <script type="ts">
-  import { Editor, Handle } from '@annotorious/annotorious';
-  import type { Rectangle, Transform } from '@annotorious/annotorious';
+  import { Handle, Editor } from '@annotorious/annotorious/src';
+  import type { Ellipse, Transform } from '@annotorious/annotorious';
 
-  console.log('ellipse editor!');
-
-  export let shape: Rectangle;
+  export let shape: Ellipse;
 
   export let transform: Transform;
 
@@ -14,7 +12,7 @@
 
   $: handleSize = 10 / viewportScale;
 
-  const editor = (rectangle: Rectangle, handle: Handle, delta: [number, number]) => {
+  const editor = (rectangle: Ellipse, handle: Handle, delta: [number, number]) => {
     const initialBounds = rectangle.geometry.bounds;
 
     let [x0, y0] = [initialBounds.minX, initialBounds.minY];
@@ -90,40 +88,21 @@
   on:release
   let:grab={grab}>
 
-  <rect 
+  <ellipse 
     class="a9s-outer"
     on:pointerdown={grab(Handle.SHAPE)}
-    x={geom.x} y={geom.y} width={geom.w} height={geom.h} />
+    cx={geom.cx} cy={geom.cy} rx={geom.rx} ry={geom.ry} />
 
-  <rect 
+  <ellipse 
     class="a9s-inner a9s-shape-handle"
     on:pointerdown={grab(Handle.SHAPE)}
-    x={geom.x} y={geom.y} width={geom.w} height={geom.h} />
+    cx={geom.cx} cy={geom.cy} rx={geom.rx} ry={geom.ry} />
 
+  <!-- 
   <rect 
-    class="a9s-edge-handle a9s-edge-handle-top" 
-    on:pointerdown={grab(Handle.TOP)}
-    x={geom.x} y={geom.y} height={1} width={geom.w} />
-
-  <rect 
-    class="a9s-edge-handle a9s-edge-handle-right"
-    on:pointerdown={grab(Handle.RIGHT)}
-    x={geom.x + geom.w} y={geom.y} height={geom.h} width={1}/>
-
-  <rect 
-    class="a9s-edge-handle a9s-edge-handle-bottom" 
-    on:pointerdown={grab(Handle.BOTTOM)}
-    x={geom.x} y={geom.y + geom.h} height={1} width={geom.w} />
-
-  <rect 
-    class="a9s-edge-handle a9s-edge-handle-left" 
-    on:pointerdown={grab(Handle.LEFT)}
-    x={geom.x} y={geom.y} height={geom.h} width={1} />
-
-  <rect 
-    class="a9s-corner-handle a9s-corner-handle-topleft"
+    class="a9s-corner-handle a9s-corner-topl"
     on:pointerdown={grab(Handle.TOP_LEFT)}
-    x={geom.x - handleSize / 2} y={geom.y - handleSize / 2} height={handleSize} width={handleSize} />
+    x={c.x - handleSize / 2} y={geom.y - handleSize / 2} height={handleSize} width={handleSize} />
 
   <rect 
     class="a9s-corner-handle a9s-corner-handle-topright"
@@ -139,4 +118,5 @@
     class="a9s-corner-handle a9s-corner-handle-bottomleft"
     on:pointerdown={grab(Handle.BOTTOM_LEFT)}
     x={geom.x - handleSize / 2} y={geom.y + geom.h - handleSize / 2} height={handleSize} width={handleSize} />
+  -->
 </Editor>
