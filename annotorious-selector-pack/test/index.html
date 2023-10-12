@@ -32,7 +32,7 @@
 
     <script type="module">
       import { createImageAnnotator } from '@annotorious/annotorious';
-      import { RubberbandEllipse } from '../src';
+      import { RubberbandEllipse, EllipseEditor } from '../src';
 
       import '@annotorious/annotorious/annotorious.css';
 
@@ -51,7 +51,7 @@
           console.log('deleted', annotation);
         });
 
-        anno.addDrawingTool('ellipse', RubberbandEllipse);
+        anno.addDrawingTool('ellipse', 'ELLIPSE', RubberbandEllipse, EllipseEditor);
 
         console.log('setting drawing tool');
         anno.setDrawingTool('ellipse');
