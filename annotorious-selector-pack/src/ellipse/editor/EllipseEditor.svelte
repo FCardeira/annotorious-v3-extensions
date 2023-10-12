@@ -12,8 +12,8 @@
 
   $: handleSize = 10 / viewportScale;
 
-  const editor = (rectangle: Ellipse, handle: Handle, delta: [number, number]) => {
-    const initialBounds = rectangle.geometry.bounds;
+  const editor = (ellipse: Ellipse, handle: Handle, delta: [number, number]) => {
+    const initialBounds = ellipse.geometry.bounds;
 
     let [x0, y0] = [initialBounds.minX, initialBounds.minY];
     let [x1, y1] = [initialBounds.maxX, initialBounds.maxY];
@@ -27,32 +27,22 @@
       y1 += dy;
     } else {
       switch (handle) {
-        case Handle.TOP:
-        case Handle.TOP_LEFT:
-        case Handle.TOP_RIGHT: {
+        case Handle.TOP: {
           y0 += dy;
           break;
         }
 
-        case Handle.BOTTOM:
-        case Handle.BOTTOM_LEFT:
-        case Handle.BOTTOM_RIGHT: {
+        case Handle.BOTTOM: {
           y1 += dy;
           break;
         }
-      }
 
-      switch (handle) {
-        case Handle.LEFT:
-        case Handle.TOP_LEFT:
-        case Handle.BOTTOM_LEFT: {
+        case Handle.LEFT: {
           x0 += dx;
           break;
         }
 
-        case Handle.RIGHT:
-        case Handle.TOP_RIGHT:
-        case Handle.BOTTOM_RIGHT: {
+        case Handle.RIGHT: {
           x1 += dx;
           break;
         }
@@ -64,10 +54,17 @@
     const w = Math.abs(x1 - x0);
     const h = Math.abs(y1 - y0);
 
+    const cx = (x0 + x1) / 2;
+    const cy = (y0 + y1) / 2;
+
+    const rx = w / 2;
+    const ry = h / 2;
+
     return {
-      ...rectangle,
+      ...ellipse,
       geometry: {
-        x, y, w, h,
+        ...ellipse.geometry,
+        cx, cy, rx, ry,
         bounds: {
           minX: x,
           minY: y,
@@ -98,25 +95,23 @@
     on:pointerdown={grab(Handle.SHAPE)}
     cx={geom.cx} cy={geom.cy} rx={geom.rx} ry={geom.ry} />
 
-  <!-- 
   <rect 
-    class="a9s-corner-handle a9s-corner-topl"
-    on:pointerdown={grab(Handle.TOP_LEFT)}
-    x={c.x - handleSize / 2} y={geom.y - handleSize / 2} height={handleSize} width={handleSize} />
+    class="a9s-corner-handle a9s-corner-top"
+    on:pointerdown={grab(Handle.TOP)}
+    x={geom.cx - handleSize / 2} y={geom.cy - handleSize / 2 - geom.ry} height={handleSize} width={handleSize} />
 
   <rect 
-    class="a9s-corner-handle a9s-corner-handle-topright"
-    on:pointerdown={grab(Handle.TOP_RIGHT)}
-    x={geom.x + geom.w - handleSize / 2} y={geom.y - handleSize / 2} height={handleSize} width={handleSize} />
+    class="a9s-corner-handle a9s-corner-handle-right"
+    on:pointerdown={grab(Handle.RIGHT)}
+    x={geom.cx + geom.rx - handleSize / 2} y={geom.cy - handleSize / 2} height={handleSize} width={handleSize} />
   
   <rect 
-    class="a9s-corner-handle a9s-corner-handle-bottomright"
-    on:pointerdown={grab(Handle.BOTTOM_RIGHT)}
-    x={geom.x + geom.w - handleSize / 2} y={geom.y + geom.h - handleSize / 2} height={handleSize} width={handleSize} />
+    class="a9s-corner-handle a9s-corner-handle-bottom"
+    on:pointerdown={grab(Handle.BOTTOM)}
+    x={geom.cx - handleSize / 2} y={geom.cy + geom.ry - handleSize / 2} height={handleSize} width={handleSize} />
     
   <rect 
-    class="a9s-corner-handle a9s-corner-handle-bottomleft"
-    on:pointerdown={grab(Handle.BOTTOM_LEFT)}
-    x={geom.x - handleSize / 2} y={geom.y + geom.h - handleSize / 2} height={handleSize} width={handleSize} />
-  -->
+    class="a9s-corner-handle a9s-corner-handle-left"
+    on:pointerdown={grab(Handle.LEFT)}
+    x={geom.cx - geom.rx - handleSize / 2} y={geom.cy - handleSize / 2} height={handleSize} width={handleSize} />
 </Editor>
