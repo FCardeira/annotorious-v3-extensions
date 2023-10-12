@@ -1,9 +1,9 @@
 <script type="ts">
   import { createEventDispatcher, onMount } from 'svelte';
   import { ShapeType } from '@annotorious/annotorious';
-  import type { Rectangle, Transform } from '@annotorious/annotorious';
+  import type { Ellipse, Transform } from '@annotorious/annotorious';
 
-  const dispatch = createEventDispatcher<{ create: Rectangle }>();
+  const dispatch = createEventDispatcher<{ create: Ellipse }>();
   
   export let transform: Transform;
   
@@ -65,8 +65,8 @@
   const onPointerUp = () => {
     // Require 4x4 pixels minimum
     if (w * h > 15) {
-      const shape: Rectangle = {
-        type: ShapeType.RECTANGLE, 
+      const shape: Ellipse = {
+        type: ShapeType.ELLIPSE, 
         geometry: {
           bounds: {
             minX: x, 
@@ -74,7 +74,11 @@
             maxX: x + w,
             maxY: y + h
           },
-          x, y, w, h
+          cx: x + w / 2,
+          cy: y + h / 2,
+          rx: w / 2,
+          ry: h / 2, 
+          rotation: 0
         }
       }
 
