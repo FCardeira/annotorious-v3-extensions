@@ -77,8 +77,7 @@
           cx: x + w / 2,
           cy: y + h / 2,
           rx: w / 2,
-          ry: h / 2, 
-          rotation: 0
+          ry: h / 2
         }
       }
 
