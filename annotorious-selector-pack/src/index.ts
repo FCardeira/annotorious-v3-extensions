@@ -1,1 +1,1 @@
-export * from './ellipse';
+export * from './selectorPack';

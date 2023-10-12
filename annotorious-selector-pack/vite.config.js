@@ -3,8 +3,6 @@ import { svelte } from '@sveltejs/vite-plugin-svelte';
 import sveltePreprocess from 'svelte-preprocess';
 import dts from 'vite-plugin-dts';
 
-import * as packageJson from './package.json';
-
 export default defineConfig({
   plugins: [
     svelte({ preprocess: sveltePreprocess() }),
@@ -27,9 +25,6 @@ export default defineConfig({
         format === 'umd' ? `annotorious-selector-pack.js` : `annotorious-selector-pack.es.js` 
     },
     rollupOptions: {
-      external: [
-        ...Object.keys(packageJson.peerDependencies)
-      ],
       output: {
         assetFileNames: 'annotorious-selector-pack.[ext]'
       }

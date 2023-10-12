@@ -41,7 +41,7 @@
     "vite": "^4.2.1",
     "vite-plugin-dts": "^2.2.0"
   },
-  "peerDependencies": {
+  "dependencies": {
     "@annotorious/annotorious": "file:../../annotorious/packages/annotorious"
   }
 }
