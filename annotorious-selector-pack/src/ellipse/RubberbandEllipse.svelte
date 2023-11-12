@@ -1,10 +1,14 @@
 <script type="ts">
   import { createEventDispatcher, onMount } from 'svelte';
+  import type { DrawingMode } from '@annotorious/annotorious/src';
   import { type Ellipse, ShapeType } from '@annotorious/annotorious/src/model';
   import type { Transform } from '@annotorious/annotorious/src/annotation';
 
   const dispatch = createEventDispatcher<{ create: Ellipse }>();
   
+  /** Props **/
+  export let addEventListener: (type: string, fn: EventListener, capture?: boolean) => void;
+  export let drawingMode: DrawingMode
   export let transform: Transform;
   
   let container: SVGGElement;
@@ -19,16 +23,22 @@
 
   let isCtrlPressed = false;
 
+  let lastPointerDown: number;
+
   let lastMoveEvent: PointerEvent;
 
   const onPointerDown = (evt: PointerEvent) => {
-    origin = transform.elementToImage(evt.offsetX, evt.offsetY);
-    anchor = origin;
+    lastPointerDown = performance.now();
 
-    x = origin[0];
-    y = origin[1];
-    w = 1;
-    h = 1;
+    if (drawingMode === 'drag') {
+      origin = transform.elementToImage(evt.offsetX, evt.offsetY);
+      anchor = origin;
+
+      x = origin[0];
+      y = origin[1];
+      w = 1;
+      h = 1;
+    }
   }
 
   const updateShape = (maybeEvent?: PointerEvent) => {
@@ -62,7 +72,45 @@
       lastMoveEvent = maybeEvent;
   }
     
-  const onPointerUp = () => {
+  const onPointerUp = (evt: PointerEvent) => {
+    if (drawingMode === 'click')
+      evt.stopImmediatePropagation();
+
+    const timeDifference = performance.now() - lastPointerDown;
+
+    if (drawingMode === 'click') {
+      // Not a single click - ignore
+      if (timeDifference > 300)
+        return;
+
+      evt.stopPropagation();
+
+      if (origin) {
+        stopDrawing();
+      } else {
+        // Start drawing
+        origin = transform.elementToImage(evt.offsetX, evt.offsetY);
+        anchor = origin;
+
+        x = origin[0];
+        y = origin[1];
+        w = 1;
+        h = 1;
+      }
+    } else if (origin) {
+      if (timeDifference > 300 || w * h > 100) {
+        evt.stopPropagation();
+        stopDrawing();
+      } else {
+        origin = null;
+        anchor = null;
+
+        lastMoveEvent = undefined;
+      }
+    }
+  }
+
+  const stopDrawing = () => {
     // Require 4x4 pixels minimum
     if (w * h > 15) {
       const shape: Ellipse = {
@@ -115,22 +163,16 @@
   }
 
   onMount(() => {
-    const svg = container.closest('svg');
-
     document.addEventListener('keyup', onKeyUp);
     document.addEventListener('keydown', onKeyDown);
 
-    svg.addEventListener('pointerdown', onPointerDown);
-    svg.addEventListener('pointermove', updateShape);
-    svg.addEventListener('pointerup', onPointerUp);
+    addEventListener('pointerdown', onPointerDown);
+    addEventListener('pointermove', updateShape);
+    addEventListener('pointerup', onPointerUp);
 
     return () => {
       document.removeEventListener('keyup', onKeyUp);
       document.removeEventListener('keydown', onKeyDown);
-
-      svg.removeEventListener('pointerdown', onPointerDown);
-      svg.removeEventListener('pointermove', updateShape);
-      svg.removeEventListener('pointerup', onPointerUp); 
     }
   });
 </script>

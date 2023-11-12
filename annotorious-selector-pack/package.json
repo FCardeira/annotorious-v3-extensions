@@ -32,9 +32,11 @@
   },
   "homepage": "https://annotorious.github.io",
   "devDependencies": {
+    "@annotorious/openseadragon": "file:../../annotorious/packages/annotorious-openseadragon",
     "@sveltejs/vite-plugin-svelte": "^2.0.4",
     "@tsconfig/svelte": "^3.0.0",
     "@types/node": "^20.8.0",
+    "openseadragon": "^4.1.0",
     "svelte": "^3.58.0",
     "svelte-preprocess": "^4.10.7",
     "typescript": "^4.9.5",
