@@ -1,5 +1,5 @@
 <script type="ts">
-  import { Handle, Editor } from '@annotorious/annotorious';
+  import { Handle, Editor } from '@annotorious/annotorious/src';
   import type { Ellipse, Transform } from '@annotorious/annotorious';
   
   export let shape: Ellipse;
