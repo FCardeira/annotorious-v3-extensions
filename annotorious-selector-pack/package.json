@@ -32,7 +32,8 @@
   },
   "homepage": "https://annotorious.github.io",
   "devDependencies": {
-    "@annotorious/openseadragon": "file:../../annotorious/packages/annotorious-openseadragon",
+    "@annotorious/core": "^3.0.0-pre-alpha-55",
+    "@annotorious/openseadragon": "^3.0.0-pre-alpha-55",
     "@sveltejs/vite-plugin-svelte": "^2.0.4",
     "@tsconfig/svelte": "^3.0.0",
     "@types/node": "^20.8.0",
@@ -44,6 +45,6 @@
     "vite-plugin-dts": "^2.2.0"
   },
   "dependencies": {
-    "@annotorious/annotorious": "file:../../annotorious/packages/annotorious"
+    "@annotorious/annotorious": "^3.0.0-pre-alpha-55"
   }
 }
