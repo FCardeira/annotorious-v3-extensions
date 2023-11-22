@@ -1,6 +1,6 @@
 {
   "name": "@annotorious/selector-pack",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Additional drawing tools for Annotorious",
   "type": "module",
   "scripts": {
@@ -32,7 +32,7 @@
   },
   "homepage": "https://annotorious.github.io",
   "devDependencies": {
-    "@annotorious/openseadragon": "^3.0.0-pre-alpha-58",
+    "@annotorious/openseadragon": "^3.0.0-rc.1",
     "@sveltejs/vite-plugin-svelte": "^2.0.4",
     "@tsconfig/svelte": "^3.0.0",
     "@types/node": "^20.8.0",
@@ -44,7 +44,7 @@
     "vite-plugin-dts": "^2.2.0"
   },
   "dependencies": {
-    "@annotorious/core": "^3.0.0-pre-alpha-58",
-    "@annotorious/annotorious": "^3.0.0-pre-alpha-58"
+    "@annotorious/core": "^3.0.0-rc.1",
+    "@annotorious/annotorious": "^3.0.0-rc.1"
   }
 }
