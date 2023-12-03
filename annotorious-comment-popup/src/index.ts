@@ -1,1 +1,1 @@
-export * from './commentPopup';
+export * from './commentPopupExtension';
