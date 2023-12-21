@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
-import type { ImageAnnotation } from '@annotorious/annotorious/src/model';
-import { parseFragmentSelector } from '@annotorious/annotorious/src/model';
-import { parseSVGSelector } from '@annotorious/annotorious/src/model';
+import type { ImageAnnotation } from '@annotorious/annotorious';
+import { parseFragmentSelector } from '@annotorious/annotorious';
+import { parseSVGSelector } from '@annotorious/annotorious';
 import type { IIIFAnnotation } from '.';
 
 interface IIIFParseResult {

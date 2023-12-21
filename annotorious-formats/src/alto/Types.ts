@@ -1,4 +1,4 @@
-import type { ImageAnnotation } from '@annotorious/annotorious/src/model';
+import type { ImageAnnotation } from '@annotorious/annotorious';
 
 export interface Page {
 

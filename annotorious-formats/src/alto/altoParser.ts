@@ -1,5 +1,5 @@
-import { ShapeType, type ImageAnnotation } from '@annotorious/annotorious/src/model';
-import type { RectangleGeometry } from '@annotorious/annotorious/src/model';
+import { ShapeType, type ImageAnnotation } from '@annotorious/annotorious';
+import type { RectangleGeometry } from '@annotorious/annotorious';
 import type { Page } from './Types';
 
 const parseTextLine = (t: Element): ImageAnnotation[] => {

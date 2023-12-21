@@ -1,7 +1,7 @@
-import type { PolygonGeometry, RectangleGeometry, Shape } from '@annotorious/annotorious/src/model';
-import { ShapeType } from '@annotorious/annotorious/src/model';
+import { ShapeType } from '@annotorious/openseadragon';
+// @ts-ignore
+import type { ImageAnnotation, PolygonGeometry, RectangleGeometry, Shape } from '@annotorious/openseadragon';
 import type { PageMetadata } from '@annotorious/formats';
-import type { ImageAnnotation } from '@annotorious/openseadragon';
 import type OpenSeadragon from 'openseadragon';
 
 export interface ImageDimensions {
