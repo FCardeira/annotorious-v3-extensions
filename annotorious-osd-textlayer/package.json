@@ -50,7 +50,7 @@
     "vite-plugin-dts": "^2.2.0"
   },
   "peerDependencies": {
-    "@annotorious/openseadragon": "^3.0.0-rc.10",
+    "@annotorious/openseadragon": "^3.0.0-rc.15",
     "openseadragon": "^3.0.0 || ^4.0.0"
   },
   "dependencies": {

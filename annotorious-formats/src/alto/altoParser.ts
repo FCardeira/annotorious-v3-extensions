@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 import { ShapeType, type ImageAnnotation } from '@annotorious/annotorious';
 import type { RectangleGeometry } from '@annotorious/annotorious';
 import type { Page } from './Types';
@@ -8,7 +9,7 @@ const parseTextLine = (t: Element): ImageAnnotation[] => {
 
   for (const str of t.querySelectorAll('String')) {
     // Example: <String ID="S3" CONTENT="a." HPOS="1979" VPOS="228" WIDTH="84" HEIGHT="92" STYLEREFS="TS1" WC="0.1"/>
-    const id = str.getAttribute('ID')
+    const id = str.getAttribute('ID') || uuidv4();
     const content = str.getAttribute('CONTENT');
     const minX = parseFloat(str.getAttribute('HPOS'));
     const minY = parseFloat(str.getAttribute('VPOS'));
