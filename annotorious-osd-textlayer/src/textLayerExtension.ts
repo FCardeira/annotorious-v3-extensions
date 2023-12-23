@@ -14,6 +14,7 @@ export const mountExtension = (
   anno: OpenSeadragonAnnotator<ImageAnnotation>, 
   opts: TextLayerOpts
 ) => {
+  // @ts-ignore
   const { viewer, state } = anno;
 
   let _visible = opts.defaultVisible === undefined ? true : opts.defaultVisible;
@@ -36,6 +37,7 @@ export const mountExtension = (
 
       getImageDimensions(viewer).then(dimensions => {
         const scaled = scaleAnnotations(annotations, metadata, dimensions);
+        // @ts-ignore
         anno.setAnnotations(scaled);
       });
     });
