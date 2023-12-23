@@ -1,5 +1,5 @@
 <script type="ts">
-  import type { ImageAnnotation } from '@annotorious/openseadragon';
+  import type { ImageAnnotation } from '@annotorious/annotorious';
   import type { TextLayerOpts } from '../Types';
 
   let ref: HTMLSpanElement;

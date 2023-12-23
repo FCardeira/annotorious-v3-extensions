@@ -1,5 +1,5 @@
 <script type="ts">
-  import type { ImageAnnotation, ImageAnnotatorState, StoreChangeEvent } from '@annotorious/openseadragon';
+  import type { ImageAnnotation, ImageAnnotatorState, StoreChangeEvent } from '@annotorious/annotorious';
   import { onMount } from 'svelte';
   import { FillBoundsLabel, FixedPageSizeLabel, FixedScreenSizeLabel } from './Label';
   import type { TextLayerOpts } from './Types';

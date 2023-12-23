@@ -61,13 +61,10 @@
             url: '33054-000002-0001.jpg'
           }]        
         });
-
         
         var anno = createOSDAnnotator(viewer, {
           pointerSelectAction: 'NONE',
-          style: function() { 
-            return { fillOpacity: 0, strokeOpacity: 0 };
-          }
+          style: { fillOpacity: 0, strokeOpacity: 0 }
         });
         
         var textlayer = mountExtension(anno, {

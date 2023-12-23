@@ -1,4 +1,4 @@
-import type { ImageAnnotation } from '@annotorious/openseadragon';
+import type { ImageAnnotation } from '@annotorious/annotorious';
 
 export interface TextLayerOpts {
 

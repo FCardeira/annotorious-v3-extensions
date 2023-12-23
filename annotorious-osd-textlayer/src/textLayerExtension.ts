@@ -1,8 +1,5 @@
-import type { 
-  ImageAnnotation, 
-  ImageAnnotatorState, 
-  OpenSeadragonAnnotator
-} from '@annotorious/openseadragon';
+import type { ImageAnnotation, ImageAnnotatorState } from '@annotorious/annotorious';
+import type { OpenSeadragonAnnotator } from '@annotorious/openseadragon';
 import { parseALTO } from '@annotorious/formats';
 import type { OCRFormat, TextLayerOpts } from './Types';
 import OpenSeadragonTextLayer from './TextLayer.svelte';
