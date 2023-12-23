@@ -50,10 +50,10 @@
     "vite-plugin-dts": "^2.2.0"
   },
   "peerDependencies": {
-    "@annotorious/openseadragon": "^3.0.0-rc.15",
+    "@annotorious/openseadragon": "^3.0.0-rc.16",
     "openseadragon": "^3.0.0 || ^4.0.0"
   },
   "dependencies": {
-    "@annotorious/formats": "^0.1.0"
+    "@annotorious/formats": "file:../annotorious-formats"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@annotorious/formats",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Additional data formats for Annotorious",
   "author": "Rainer Simon",
   "license": "BSD-3-Clause",
@@ -34,7 +34,7 @@
     "vitest": "^0.24.3"
   },
   "dependencies": {
-    "@annotorious/annotorious": "^3.0.0-rc.15",
+    "@annotorious/annotorious": "^3.0.0-rc.16",
     "uuid": "^9.0.0"
   }
 }
