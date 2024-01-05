@@ -1,6 +1,6 @@
-<script type="ts">
+<script lang="ts">
   import { Handle, Editor } from '@annotorious/annotorious/src';
-  import type { Ellipse, Transform } from '@annotorious/annotorious';
+  import type { Ellipse, Shape, Transform } from '@annotorious/annotorious';
   
   export let shape: Ellipse;
 
@@ -12,7 +12,7 @@
 
   $: handleSize = 10 / viewportScale;
 
-  const editor = (ellipse: Ellipse, handle: Handle, delta: [number, number]) => {
+  const editor = (ellipse: Shape, handle: Handle, delta: [number, number]) => {
     const initialBounds = ellipse.geometry.bounds;
 
     let [x0, y0] = [initialBounds.minX, initialBounds.minY];
