@@ -24,6 +24,8 @@
 
   let height: number;
 
+  $: fontSize = opts.fontSize || 16;
+
   const redraw = () => {
     const viewportBounds = viewer.viewport.viewportToImageRectangle(viewer.viewport.getBounds(true));
 
@@ -110,7 +112,7 @@
 
 {#if visible}
   <div 
-    style={`transform:${transform}; width: ${width}px; height: ${height}px`}
+    style={`transform:${transform}; width: ${width}px; height: ${height}px; font-size: ${fontSize}px;`}
     class="a9s-annotationlayer a9s-osd-textlayer"
     class:fixed-screen-size={opts.mode === 'fixedScreenSize' || (!opts.mode)}
     class:fixed-page-size={opts.mode === 'fixedPageSize'}

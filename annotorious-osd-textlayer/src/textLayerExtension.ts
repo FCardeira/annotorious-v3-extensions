@@ -33,8 +33,14 @@ export const mountExtension = (
       const { annotations, metadata } = parseALTO(xml);
 
       getImageDimensions(viewer).then(dimensions => {
-        const scaled = scaleAnnotations(annotations, metadata, dimensions);
-        // @ts-ignore
+        const { scaled, scaleY } = scaleAnnotations(annotations, metadata, dimensions);
+
+        if (!opts.fontSize) {
+          // No user-defined font size - automatic!
+          const fontSize = metadata.averageLineHeight * scaleY * 0.5;
+          textLayer.$set({ opts: { ...opts, fontSize }});
+        }
+
         anno.setAnnotations(scaled);
       });
     });

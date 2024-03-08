@@ -4,6 +4,8 @@ export interface TextLayerOpts {
 
   defaultVisible?: boolean;
 
+  fontSize?: number;
+
   label(annotation: ImageAnnotation): string | undefined;
 
   mode?: 'fillBounds' | 'fixedPageSize' | 'fixedScreenSize';

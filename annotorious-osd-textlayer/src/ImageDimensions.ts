@@ -70,7 +70,11 @@ export const scaleAnnotations = (
   a: ImageAnnotation[], 
   page: PageMetadata, 
   dim: ImageDimensions
-): ImageAnnotation[] => {
+): {
+  scaled: ImageAnnotation[],
+  scaleX: number,
+  scaleY: number
+} => {
   const pageWidth = page.width;
   const pageHeight = page.height;
 
@@ -78,25 +82,27 @@ export const scaleAnnotations = (
   const imgHeight = dim.height;
 
   if (pageWidth && pageHeight) {
-    const kx = imgWidth / pageWidth;
-    const ky = imgHeight / pageHeight;
+    const scaleX = imgWidth / pageWidth;
+    const scaleY = imgHeight / pageHeight;
 
-    if (kx === 1 && ky == 1) {
+    if (scaleX === 1 && scaleY === 1) {
       // No need to scale
-      return a;
+      return { scaled: a, scaleX, scaleY };
     } else {
       console.log('[TextLayerExtension] Page and image are different size - scaling annotations');
 
-      return a.map(annotation => ({
+      const scaled = a.map(annotation => ({
         ...annotation,
         target: {
           ...annotation.target,
-          selector: scaleShape(annotation.target.selector, kx, ky)
+          selector: scaleShape(annotation.target.selector, scaleX, scaleY)
         }
       }));
+
+      return { scaled, scaleX, scaleY };
     }
   } else {
     console.warn('[TextLayerExtension] Cannot scale annotations without page dimensions');
-    return a;
+    return { scaled: a, scaleX: 1, scaleY: 1 };
   }
 }

@@ -29,7 +29,6 @@
 
 .fixed-screen-size .annotation span {
   display:inline-block;
-  font-size: 14px;
   background-color: rgba(255, 255, 255, 0.8);
   padding: 3px 6px;
   border-radius: 2px;
@@ -37,6 +36,5 @@
 
 .fixed-page-size {
   color: #d80bde;
-  font-size: 58px;
   text-shadow: 0 0 6px rgba(255, 255, 255, 95%);
 }
