@@ -15,5 +15,7 @@ export interface PageMetadata {
   height?: number;
 
   width?: number;
+
+  averageLineHeight?: number;
   
 }
