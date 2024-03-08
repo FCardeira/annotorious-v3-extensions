@@ -1,4 +1,4 @@
-<script type="ts">
+<script lang="ts">
   import type { ImageAnnotation } from '@annotorious/annotorious';
   import type { TextLayerOpts } from '../Types';
 

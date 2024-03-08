@@ -18,8 +18,9 @@ export const mountExtension = (
 
   let _locked = false;
 
+  // @ts-ignore
   const textLayer = new OpenSeadragonTextLayer({
-    target: viewer.element.querySelector('.openseadragon-canvas'),
+    target: viewer.element.querySelector('.openseadragon-canvas')!,
     props: { state: state as ImageAnnotatorState, viewer, opts, visible: _visible }
   });
 
@@ -35,9 +36,10 @@ export const mountExtension = (
       getImageDimensions(viewer).then(dimensions => {
         const { scaled, scaleY } = scaleAnnotations(annotations, metadata, dimensions);
 
-        if (!opts.fontSize) {
+        if (!opts.fontSize && metadata.averageLineHeight) {
           // No user-defined font size - automatic!
           const fontSize = metadata.averageLineHeight * scaleY * 0.5;
+
           textLayer.$set({ opts: { ...opts, fontSize }});
         }
 
@@ -48,12 +50,15 @@ export const mountExtension = (
   const setLocked = (locked: boolean) => {
     _locked = locked;
     viewer.setMouseNavEnabled(!locked);
-    textLayer.$$set({ captureEvents: locked });
+
+    // @ts-ignore
+    textLayer.$set({ captureEvents: locked });
   }
 
   const setVisible = (visible: boolean) => {
     _visible = visible;
-    textLayer.$$set({ visible });
+
+    textLayer.$set({ visible });
   }
 
   const unmount = () => textLayer.$destroy();

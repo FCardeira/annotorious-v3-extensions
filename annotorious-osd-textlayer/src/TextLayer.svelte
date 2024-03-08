@@ -1,4 +1,4 @@
-<script type="ts">
+<script lang="ts">
   import type { ImageAnnotation, ImageAnnotatorState, StoreChangeEvent } from '@annotorious/annotorious';
   import { onMount } from 'svelte';
   import { FillBoundsLabel, FixedPageSizeLabel, FixedScreenSizeLabel } from './Label';
@@ -88,7 +88,7 @@
     store.observe(onStoreChange);
 
     const onCopy = (evt: ClipboardEvent) => {
-      const unformatted = document.getSelection().toString();
+      const unformatted = document.getSelection()!.toString();
 
       // @ts-ignore
       const clipboardData = evt.clipboardData || window.clipboardData;  

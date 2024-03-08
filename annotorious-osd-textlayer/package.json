@@ -1,6 +1,6 @@
 {
   "name": "@annotorious/openseadragon-textlayer",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "A text overlay layer for Annotorious OpenSeadragon",
   "keywords": [
     "Annotation",
@@ -39,19 +39,19 @@
   },
   "homepage": "https://annotorious.github.io",
   "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "^2.0.4",
-    "@tsconfig/svelte": "^3.0.0",
-    "@types/node": "^20.8.0",
-    "@types/openseadragon": "^3.0.4",
-    "svelte": "^3.58.0",
-    "svelte-preprocess": "^4.10.7",
-    "typescript": "^4.9.5",
-    "vite": "^4.2.1",
-    "vite-plugin-dts": "^2.2.0"
+    "@sveltejs/vite-plugin-svelte": "^3.0.2",
+    "@tsconfig/svelte": "^5.0.2",
+    "@types/node": "^20.11.25",
+    "@types/openseadragon": "^3.0.10",
+    "svelte": "^4.2.12",
+    "svelte-preprocess": "^5.1.3",
+    "typescript": "^5.4.2",
+    "vite": "^5.1.5",
+    "vite-plugin-dts": "^3.7.3"
   },
   "peerDependencies": {
     "openseadragon": "^3.0.0 || ^4.0.0",
-    "@annotorious/openseadragon": "^3.0.0-rc.16"
+    "@annotorious/openseadragon": "^3.0.0-rc.19"
   },
   "dependencies": {
     "@annotorious/annotorious": "^3.0.0-rc.19",
