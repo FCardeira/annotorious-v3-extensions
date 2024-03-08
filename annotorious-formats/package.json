@@ -34,7 +34,7 @@
     "vitest": "^0.24.3"
   },
   "dependencies": {
-    "@annotorious/annotorious": "^3.0.0-rc.16",
+    "@annotorious/annotorious": "^3.0.0-rc.19",
     "uuid": "^9.0.0"
   }
 }
