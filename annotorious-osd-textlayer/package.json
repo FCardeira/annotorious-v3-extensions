@@ -54,8 +54,8 @@
     "@annotorious/openseadragon": "^3.0.0-rc.16"
   },
   "dependencies": {
-    "@annotorious/annotorious": "^3.0.0-rc.16",
-    "@annotorious/core": "^3.0.0-rc.16",
+    "@annotorious/annotorious": "^3.0.0-rc.19",
+    "@annotorious/core": "^3.0.0-rc.19",
     "@annotorious/formats": "^0.2.0"
   }
 }
