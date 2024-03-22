@@ -1,9 +1,9 @@
-import { readFile } from 'fs/promises';
+import { promises as fs } from 'fs';
 import { describe, it, expect } from 'vitest';
-import { parseALTO } from 'src/alto/altoParser';
+import { parseALTO } from '../../src/alto/altoParser';
 
 // Shorthand
-const load = (fileName: string) => readFile(`${__dirname}/${fileName}`, 'utf8');
+const load = (fileName: string) => fs.readFile(`${__dirname}/${fileName}`, 'utf8');
 
 /**
  * @vitest-environment jsdom
