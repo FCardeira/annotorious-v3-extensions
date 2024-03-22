@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <title>Annotorious OpenSeadragon Textlayer</title>
+    <script src="https://cdn.jsdelivr.net/npm/openseadragon@4.1.0/build/openseadragon/openseadragon.min.js"></script>
+    <style>
+      html, body, #openseadragon {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .openseadragon-canvas {
+        outline: none;
+      }
+
+      .a9s-osd-textlayer {
+        color: rgba(0, 0, 0, 0.6);
+      }
+
+      .buttons {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="openseadragon"></div>
+
+    <div class="buttons">
+      <button id="toggle-locked">Lock for Copy &amp; Paste</button>
+      <button id="toggle-visibility">Toggle Layer Visiblity</button>
+      <input id="rotation" type="range" min="-180" max="180" />
+    </div>
+
+    <script type="module">
+      import OpenSeadragon from 'openseadragon'
+      import { createOSDAnnotator } from '@annotorious/openseadragon';
+      import { mountExtension, transcriptionLabel } from '../src';
+
+      import '@annotorious/openseadragon/annotorious-openseadragon.css';
+
+      window.onload = function() {
+        var viewer = OpenSeadragon({
+          id: 'openseadragon',
+          prefixUrl: 'https://cdn.jsdelivr.net/npm/openseadragon@3.1/build/openseadragon/images/', 
+          showRotationControl: true,
+          showFlipControl: true,
+          gestureSettingsMouse: {
+            clickToZoom: false
+          },
+          gestureSettingsTouch: {
+            pinchRotate: true
+          },
+          tileSources: [
+            'https://iiif.wellcomecollection.org/image/b19553729_MS_8468_0012.JP2/info.json'
+          ]        
+        });
+        
+        var anno = createOSDAnnotator(viewer, {
+          pointerSelectAction: 'NONE',
+          style: { fillOpacity: 0.1, strokeOpacity: 0 }
+        });
+        
+        var textlayer = mountExtension(anno, {
+          label: transcriptionLabel,
+          mode: 'fixedPageSize',  
+          position: 'center',
+          offsetY: 60
+        });
+
+        textlayer.loadOCR('33968701.xml');
+
+        const btnLocked = document.getElementById('toggle-locked');
+        btnLocked.addEventListener('click', () => {
+          if (textlayer.isLocked()) {
+            btnLocked.innerHTML = 'Lock for Copy &amp; Paste';
+            textlayer.setLocked(false);
+          } else {
+            btnLocked.innerHTML = 'Unlock';
+            textlayer.setLocked(true);
+          }
+        });
+
+        document.getElementById('toggle-visibility').addEventListener('click', () => {
+          textlayer.setVisible(!textlayer.isVisible());
+        });
+
+        document.getElementById('rotation').addEventListener('input', (evt) => {
+          let corrected = parseInt(evt.target.value); 
+          if (corrected < 0)
+            corrected += 360;
+
+          viewer.viewport.setRotation(corrected);
+        });
+      }
+    </script>
+  </body>
+</html>

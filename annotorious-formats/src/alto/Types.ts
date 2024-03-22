@@ -16,6 +16,16 @@ export interface PageMetadata {
 
   width?: number;
 
-  averageLineHeight?: number;
+  numLines: number;
+
+  avgCharsPerLine: number;
+
+  avgLineHeight: number;
+
+  avgLineWidth: number;
+
+  avgWordsPerLine: number;
+
+  avgWordWidth: number;
   
 }

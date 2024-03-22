@@ -1,6 +1,6 @@
 {
   "name": "@annotorious/formats",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Additional data formats for Annotorious",
   "author": "Rainer Simon",
   "license": "BSD-3-Clause",

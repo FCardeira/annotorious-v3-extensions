@@ -5,12 +5,23 @@ import type { Page } from './Types';
 
 const parseTextLine = (
   t: Element
-): { annotations: ImageAnnotation[], averageHeight: number } => {
+) => {
   const annotations: ImageAnnotation[] = [];
+
+  // Record line width
+  let lineMinX = Infinity;
+  let lineMaxX = 0;
+  
+  // Count characters and Strings (=words, roughly speaking)
+  let numChars = 0;
+  let numStrings = 0;
 
   // Sum up the individual word heights, so we can 
   // compute average line height in the end
-  let wordHeightSum = 0;
+  let stringHeightSum = 0;
+
+  // Same for word width
+  let stringWidthSum = 0;
 
   const strings = t.querySelectorAll('String');
 
@@ -26,7 +37,17 @@ const parseTextLine = (
     const maxX = minX + w;
     const maxY = minY + h;
 
-    wordHeightSum += h;
+    if (minX < lineMinX)
+      lineMinX = minX;
+
+    if (maxX > lineMaxX)
+      lineMaxX = maxX;
+
+    numChars += content.length;
+    numStrings += 1;
+
+    stringHeightSum += h;
+    stringWidthSum += w;
 
     annotations.push({
       id,
@@ -52,15 +73,18 @@ const parseTextLine = (
     })
   }
 
-  return { annotations, averageHeight: wordHeightSum / strings.length };
+  return { 
+    annotations, 
+    avgWordHeight: stringHeightSum / strings.length,
+    avgWordWidth: stringWidthSum / strings.length,
+    lineWidth: lineMaxX - lineMinX,
+    numWords: numStrings,
+    numChars
+  };
 }
 
 export const parseALTO = (xmlText: string): Page => {
   const annotations = [];
-
-  // Sum up average line height, so we can compute
-  // global average line across the page in the end
-  let lineHeightSum = 0;
 
   const parser = new DOMParser();
 
@@ -70,10 +94,35 @@ export const parseALTO = (xmlText: string): Page => {
 
   const textLines = doc.querySelectorAll('TextLine');
 
-  for (const line of textLines) {
-    const { annotations: lineAnnotations, averageHeight } = parseTextLine(line);
+  // Sum up average word width and height, so we can compute
+  // global averages across the page in the end
+  let wordHeightSum = 0;
+  let wordWidthSum = 0;
 
-    lineHeightSum += averageHeight;
+  // Same for line width...
+  let lineWidthSum = 0;
+
+  // ...and number of words and characters per line
+  let numWordsSum = 0;
+  let numCharsSum = 0;
+
+  for (const line of textLines) {
+    const { 
+      annotations: lineAnnotations, 
+      avgWordHeight,
+      avgWordWidth,
+      lineWidth,
+      numWords,
+      numChars
+    } = parseTextLine(line);
+
+    wordHeightSum += avgWordHeight;
+    wordWidthSum += avgWordWidth;
+
+    lineWidthSum += lineWidth;
+
+    numWordsSum += numWords;
+    numCharsSum += numChars;
 
     annotations.push(...lineAnnotations);
   }
@@ -81,8 +130,29 @@ export const parseALTO = (xmlText: string): Page => {
   const id = page.getAttribute('ID');
   const height = parseFloat(page.getAttribute('HEIGHT'));
   const width = parseFloat(page.getAttribute('WIDTH')); 
+  const numLines = textLines.length;
 
-  const averageLineHeight = lineHeightSum / textLines.length;
+  const { length } = textLines;
 
-  return { annotations, metadata: { id, height, width, averageLineHeight }};
+  const avgLineHeight = wordHeightSum / length;
+  const avgLineWidth = lineWidthSum / length;
+  const avgWordWidth = wordWidthSum / length;
+
+  const avgWordsPerLine = numWordsSum / length;
+  const avgCharsPerLine = numCharsSum / length;
+
+  return {
+    annotations, 
+    metadata: { 
+      id, 
+      height,
+      width, 
+      avgLineHeight,
+      avgLineWidth,
+      avgWordWidth,
+      avgWordsPerLine,
+      avgCharsPerLine,
+      numLines
+    }
+  };
 }
