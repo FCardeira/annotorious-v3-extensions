@@ -1,6 +1,6 @@
 {
   "name": "@annotorious/selector-pack",
-  "version": "3.0.0-rc.20",
+  "version": "3.0.0-rc.21",
   "description": "Additional drawing tools for Annotorious",
   "type": "module",
   "scripts": {
