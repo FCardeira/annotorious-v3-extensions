@@ -43,12 +43,9 @@
   }
 
   const virtualElement = writable<VirtualElement>({ getBoundingClientRect })
-
-  $: virtualElement.set({ getBoundingClientRect });
-
   floatingRef(virtualElement);
 
-  $: $selection.selected, onSelect();
+  $: $selection, onSelect();
 
   const onSelect = () => {
     if (storeObserver)
@@ -57,9 +54,7 @@
     if (isSelected($selection)) {
       setPosition($selection);
 
-      storeObserver = (event: StoreChangeEvent<ImageAnnotation>) => {
-        setPosition($selection);
-      }
+      storeObserver = () => setPosition($selection);
 
       store.observe(storeObserver, { annotations: $selection.selected.map(s => s.id) });
     }
@@ -78,11 +73,13 @@
     const scaleY = container.clientHeight / container.naturalHeight;
 
     const { minX, minY, maxX, maxY } = annotation.target.selector.geometry.bounds;
-
+    
     x = minX * scaleX + offset.left;
     y = minY * scaleY + offset.top;
     w = (maxX - minX) * scaleX;
     h = (maxY - minY) * scaleY;
+
+    virtualElement.set({ getBoundingClientRect });
   }
 </script>
 
