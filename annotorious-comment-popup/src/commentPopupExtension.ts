@@ -1,12 +1,14 @@
-import type { Annotator } from '@annotorious/svelte';
 import ImagePopup from './ImagePopup/ImagePopup.svelte';
-import type { ImageAnnotatorState } from '@annotorious/annotorious';
+import type { ImageAnnotator } from '@annotorious/annotorious';
 
-export const mountExtension = (anno: Annotator) => {
+export const mountExtension = (image: HTMLImageElement, anno: ImageAnnotator) => {
 
   const popup = new ImagePopup({
     target: document.body,
-    props: { state: anno.state as ImageAnnotatorState }
+    props: { 
+      container: image,
+      state: anno.state 
+    }
   });
 
   const unmount = () => popup.$destroy();

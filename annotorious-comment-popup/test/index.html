@@ -41,7 +41,7 @@
           adapter: W3CImageFormat('sample-image')
         });
 
-        var popup = mountExtension(anno);
+        var popup = mountExtension(document.getElementById('sample-image'), anno);
         
         anno.loadAnnotations('annotations.w3c.json');
       }
