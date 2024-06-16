@@ -44,6 +44,7 @@
   "dependencies": {
     "@annotorious/annotorious": "^3.0.0-rc.29",
     "@floating-ui/core": "^1.6.2",
+    "svelte-autosize": "^1.1.0",
     "svelte-floating-ui": "^1.5.8"
   }
 }

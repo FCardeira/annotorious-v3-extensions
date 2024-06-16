@@ -1,25 +1,22 @@
 <script lang="ts">
-  import { offset, flip, shift, type VirtualElement, type ClientRectObject } from "svelte-floating-ui/dom";
-  import { createFloatingActions } from "svelte-floating-ui";
-  import type { AnnotatorState, ImageAnnotation } from '@annotorious/annotorious';
-  import type { Selection, StoreChangeEvent } from '@annotorious/annotorious';
-    import { writable } from "svelte/store";
-
-  export let state: AnnotatorState<ImageAnnotation>;
+  import { writable } from 'svelte/store';
+  import { offset, flip, shift, type VirtualElement, type ClientRectObject } from 'svelte-floating-ui/dom';
+  import { createFloatingActions } from 'svelte-floating-ui';
+  import type {  AnnotatorState, ImageAnnotation, Selection, StoreChangeEvent } from '@annotorious/annotorious';
+  import Comment from "./Comment.svelte";
 
   export let container: HTMLImageElement;
-
-  let storeObserver: (event: StoreChangeEvent<ImageAnnotation>) => void;
+  export let state: AnnotatorState<ImageAnnotation>;
 
   const { selection, store } = state; 
 
+  let storeObserver: (event: StoreChangeEvent<ImageAnnotation>) => void;
+
   const isSelected = (selection: Selection) => selection.selected?.length > 0;
 
-  $: $selection, onSelect();
-
   const [ floatingRef, floatingContent ] = createFloatingActions({
-    strategy: "absolute",
-    placement: "top",
+    strategy: 'absolute',
+    placement: 'bottom-start',
     middleware: [
       offset(6),
       flip(),
@@ -47,9 +44,11 @@
 
   const virtualElement = writable<VirtualElement>({ getBoundingClientRect })
 
-  $: virtualElement.set({ getBoundingClientRect })
+  $: virtualElement.set({ getBoundingClientRect });
 
-  floatingRef(virtualElement)
+  floatingRef(virtualElement);
+
+  $: $selection.selected, onSelect();
 
   const onSelect = () => {
     if (storeObserver)
@@ -88,21 +87,23 @@
 </script>
 
 {#if isSelected($selection)}
-  <div 
-    class="a9s-popup a9s-osd-popup"
-    style={`position: absolute`}
-    use:floatingContent>
-    {$selection.selected.map(s => s.id).join(', ')}
+  <div class="a9s-popup" use:floatingContent>
+    <Comment />
+    <div>
+      <button>Cancel</button> <button>Ok</button>
+    </div>
   </div>
 {/if}
 
 <style>
-  .a9s-osd-popup {
+  .a9s-popup {
     background-color: #fff;
-    border: 1px solid #a2a2a2;
-    height: 250px;
+    border-radius: 3px;
+    box-shadow: 
+      0 0 3px -1px rgba(0, 0, 0, 0.6),
+      2px 2px 42px rgba(0, 0, 0, 0.25);
+    padding: 0.5rem;
     position: absolute;
-    width: 400px;
-    z-index: 1;
+    z-index: 990;
   }
 </style>
