@@ -1,9 +1,13 @@
 <script lang="ts">
   import autosize from 'svelte-autosize';
+
+  export let comment: string | undefined;
 </script>
 
 <div class="a9s-comment">
-  <textarea use:autosize></textarea>
+  <textarea 
+    use:autosize
+    bind:value={comment} />
 </div>
 
 <style>

@@ -44,6 +44,9 @@
         var popup = mountExtension(document.getElementById('sample-image'), anno);
         
         anno.loadAnnotations('annotations.w3c.json');
+
+        anno.on('createAnnotation', a => console.log(a));
+        anno.on('updateAnnotation', a => console.log(a));
       }
     </script>
   </body>

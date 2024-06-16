@@ -1,9 +1,10 @@
 <script lang="ts">
   import { writable } from 'svelte/store';
+  import { v4 as uuidv4 } from 'uuid';
   import { offset, flip, shift, type VirtualElement, type ClientRectObject } from 'svelte-floating-ui/dom';
   import { createFloatingActions } from 'svelte-floating-ui';
   import type {  AnnotatorState, ImageAnnotation, Selection, StoreChangeEvent } from '@annotorious/annotorious';
-  import Comment from "./Comment.svelte";
+  import Comment from './Comment.svelte';
 
   export let container: HTMLImageElement;
   export let state: AnnotatorState<ImageAnnotation>;
@@ -47,9 +48,18 @@
 
   $: $selection, onSelect();
 
+  const getComment = (annotationId: string) => {
+    const a = store.getAnnotation(annotationId);
+    return (a?.bodies || []).find(b => b.purpose === 'commenting' || !b.purpose)?.value;
+  }
+
+  let comment: string | undefined;
+
   const onSelect = () => {
     if (storeObserver)
       store.unobserve(storeObserver);
+
+    comment = getComment($selection.selected && $selection.selected[0]?.id);
 
     if (isSelected($selection)) {
       setPosition($selection);
@@ -81,13 +91,43 @@
 
     virtualElement.set({ getBoundingClientRect });
   }
+
+  const onCancel = () => selection?.clear();
+
+  const onSave = () => {
+    if (!$selection || $selection.selected.length === 0) return; // Should never happen
+
+    const selectedId = $selection.selected[0].id;
+
+    const current = state.store.getAnnotation(selectedId);
+
+    state.store.updateAnnotation(selectedId, {
+      ...current,
+      bodies: [
+        ...(current?.bodies || []).filter(b => b.purpose !== 'commenting' && b.purpose),
+        {
+          annotation: selectedId,
+          id: uuidv4(),
+          purpose: 'commenting',
+          value: comment
+        }
+      ]
+    } as ImageAnnotation);
+
+    selection.clear();
+  }
 </script>
 
 {#if isSelected($selection)}
   <div class="a9s-popup" use:floatingContent>
-    <Comment />
+    <Comment 
+      bind:comment={comment} />
     <div>
-      <button>Cancel</button> <button>Ok</button>
+      <button
+        on:click={onCancel}>Cancel</button> 
+        
+      <button
+        on:click={onSave}>Ok</button>
     </div>
   </div>
 {/if}
