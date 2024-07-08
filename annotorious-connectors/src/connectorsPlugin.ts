@@ -1,12 +1,18 @@
-import type { Annotation, ImageAnnotator, ImageAnnotation } from '@annotorious/annotorious';
 import { ConnectorLayer } from './ConnectorLayer';
+import type { 
+  ImageAnnotator,
+  ImageAnnotation, 
+  SvelteImageAnnotatorState 
+} from '@annotorious/annotorious';
 
 export const mountPlugin = (anno: ImageAnnotator) => {
 
-  console.log(anno);
-
   const connectorLayer = new ConnectorLayer({
-    target: anno.element
+    target: anno.element,
+    props: {
+      start: undefined,
+      state: anno.state as SvelteImageAnnotatorState
+    }
   });
 
   const onMouseEnterAnnotation = (annotation: ImageAnnotation) => {
@@ -19,9 +25,7 @@ export const mountPlugin = (anno: ImageAnnotator) => {
 
   const onSelectionChanged = (selection: ImageAnnotation[]) => {
     const selected = (selection || [])[0];
-    
-    // Start drawing
-
+    connectorLayer.$set({ start: selected });
   }
 
   anno.on('mouseEnterAnnotation', onMouseEnterAnnotation);

@@ -1,5 +1,10 @@
 <script lang="ts">
-  
+  import type { ImageAnnotation, SvelteImageAnnotatorState } from '@annotorious/annotorious';
+
+  export let start: ImageAnnotation | undefined;
+  export let state: SvelteImageAnnotatorState;
+
+  $: console.log(start);
 </script>
 
 <svg class="a9s-connectors">
