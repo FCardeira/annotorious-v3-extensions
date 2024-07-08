@@ -20,5 +20,8 @@
   },
   "peerDependencies": {
     "@annotorious/annotorious": "../../annotorious/packages/annotorious"
+  },
+  "dependencies": {
+    "svg-round-corners": "^0.4.3"
   }
 }
