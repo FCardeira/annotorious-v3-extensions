@@ -1,5 +1,6 @@
 <script lang="ts">
   import { writable } from 'svelte/store';
+  import { fade } from 'svelte/transition';
   import { v4 as uuidv4 } from 'uuid';
   import { offset, flip, shift, type VirtualElement, type ClientRectObject } from 'svelte-floating-ui/dom';
   import { createFloatingActions } from 'svelte-floating-ui';
@@ -119,28 +120,17 @@
 </script>
 
 {#if isSelected($selection)}
-  <div class="a9s-popup" use:floatingContent>
+  <div class="a9s-popup" use:floatingContent transition:fade={{ duration: 120 }}>
     <Comment 
       bind:comment={comment} />
-    <div>
+
+    <div class="a9s-popup-buttons">
       <button
         on:click={onCancel}>Cancel</button> 
         
       <button
+        class="save"
         on:click={onSave}>Ok</button>
     </div>
   </div>
 {/if}
-
-<style>
-  .a9s-popup {
-    background-color: #fff;
-    border-radius: 3px;
-    box-shadow: 
-      0 0 3px -1px rgba(0, 0, 0, 0.6),
-      2px 2px 42px rgba(0, 0, 0, 0.25);
-    padding: 0.5rem;
-    position: absolute;
-    z-index: 990;
-  }
-</style>

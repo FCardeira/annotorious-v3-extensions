@@ -1,0 +1,54 @@
+.a9s-popup {
+  background-color: #383838;
+  border: 1px solid #000;
+  border-radius: 8px;
+  min-height: 26px;
+  outline: none;
+  padding: 0.5rem;
+  position: absolute;
+  width: 220px;
+  box-shadow:
+    0 5px 53px rgba(0,0,0,0.7),
+    inset 0 1px 1px rgba(255,255,255,0.25);
+}
+
+.a9s-popup textarea {
+  border: none;
+  background-color: #383838;
+  color:#eee;
+  font-family: Verdana,Arial;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 150%;
+  outline: none;
+  padding: 5px;
+  resize: none;
+  width: 100%;
+}
+
+.a9s-popup-buttons {
+  display: flex;
+  gap: 0.25rem;
+  height:26px;
+  justify-content: flex-end;
+  padding-top: 0.125rem;
+  white-space: nowrap;
+}
+
+.a9s-popup-buttons button {
+  background: -webkit-gradient(linear,left top,left bottom,from(#656565),to(#2C2C2C));
+  background: -moz-linear-gradient(top,#656565,#2C2C2C);
+  border: 1px solid #000;
+  border-radius: 3px;
+  box-shadow: 
+    inset 0 1px 1px rgba(255,255,255,0.25),
+    0 1px 1px rgba(255,255,255,0.25);
+  color: #f2f2f2;
+  cursor: pointer;
+  width: 60px;
+}
+
+.a9s-popup-buttons button.save {
+  background: -webkit-gradient(linear,left top,left bottom,from(#FFA52C),to(#FB7B28));
+  background: -moz-linear-gradient(top,#FFA52C,#FB7B28);
+}
