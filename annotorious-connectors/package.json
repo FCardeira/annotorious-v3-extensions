@@ -19,6 +19,6 @@
     "vite-plugin-dts": "^3.9.1"
   },
   "peerDependencies": {
-    "@annotorious/annotorious": "^3.0.0-rc.30"
+    "@annotorious/annotorious": "../../annotorious/packages/annotorious"
   }
 }

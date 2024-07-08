@@ -38,7 +38,12 @@
       import '@annotorious/annotorious/annotorious.css';
 
       window.onload = function() {        
-        var anno = createImageAnnotator('sample-image');
+        var anno = createImageAnnotator('sample-image', {
+          pointerSelectAction: 'SELECT',
+          drawingEnabled: false
+        });
+
+        anno.loadAnnotations('./annotations.json');
 
         mountPlugin(anno);
       }
