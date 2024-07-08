@@ -13,7 +13,7 @@
   {#if (endDirection)}
     <line x1={start.x} y1={start.y} x2={end.x} y2={end.y} stroke="black" />
   {:else}
-    {#if startDirection === 'HORIZONTAL'}
+    {#if true}
       <path d={roundCorners(
         `M${start.x},${start.y} 
          H${end.x}
