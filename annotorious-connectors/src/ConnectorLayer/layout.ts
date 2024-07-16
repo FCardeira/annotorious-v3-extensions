@@ -5,6 +5,7 @@ import type {
   ConnectionHandle, 
   Direction, 
   FloatingConnectionHandle, 
+  Path, 
   PinnedConnectionHandle
  } from 'src/Types';
 
@@ -115,7 +116,7 @@ const getLength = (connection: Connection) => {
   return Math.abs(dx) + Math.abs(dy);
 }
 
-export const computePath = (connection: Connection, r?: number) => {
+export const computePath = (connection: Connection, r?: number): Path => {
   const segments = connection.layout.split('-') as Direction[];
 
   const isS = segments.length === 3;
