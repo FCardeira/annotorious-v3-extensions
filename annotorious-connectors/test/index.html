@@ -20,6 +20,10 @@
         position: relative;
       }
 
+      #content button {
+        margin-bottom: 10px;
+      }
+
       #content img {
         max-width: 100%;
       }
@@ -28,6 +32,7 @@
 
   <body>
     <div id="content">    
+      <button id="relations">Mode: Annotate</button>
       <img id="sample-image" src="640px-Hallstatt.jpg" />
     </div>
 
@@ -38,14 +43,23 @@
       import '@annotorious/annotorious/annotorious.css';
 
       window.onload = function() {        
-        var anno = createImageAnnotator('sample-image', {
-          pointerSelectAction: 'SELECT',
-          drawingEnabled: false
-        });
+        var anno = createImageAnnotator('sample-image');
 
         anno.loadAnnotations('./annotations.json');
 
-        mountPlugin(anno);
+        const connectors = mountPlugin(anno);
+
+        var button = document.getElementById('relations');
+        button.addEventListener('click', function() {
+          console.log(button.innerText);
+          if (button.innerText === 'Mode: Annotate') {
+            button.innerText = 'Mode: Relations';
+            connectors.setEnabled(true);
+          } else {
+            button.innerText = 'Mode: Annotate';
+            connectors.setEnabled(false);
+          }
+        });
       }
     </script>
   </body>
