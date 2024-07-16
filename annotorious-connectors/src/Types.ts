@@ -1,43 +1,27 @@
 export type Point = { x: number, y: number };
 
-export type Direction = 'NORTH' | 'EAST' | 'SOUTH' | 'WEST';
+export type Direction = 'N' | 'E' | 'S' | 'W';
 
-export type Orientation = 'HORIZONTAL' | 'VERTICAL';
-
-export interface ConnectionHandle {
+export interface FloatingConnectionHandle {
 
   point: Point;
 
+}
+
+export interface PinnedConnectionHandle extends FloatingConnectionHandle {
+
   direction: Direction;
 
 }
 
-interface BaseConnection {
+export type ConnectionHandle = FloatingConnectionHandle | PinnedConnectionHandle;
 
-  start: ConnectionHandle;
+export interface Connection {
 
-  segments: ConnectionSegment[];
+  start: PinnedConnectionHandle;
 
-}
+  layout: string;
 
-export interface ConnectionSegment {
-
-  direction: Direction;
-
-  length: 'FULL' | 'HALF';
+  end: ConnectionHandle | PinnedConnectionHandle;
 
 }
-
-export interface PinnedConnection extends BaseConnection {
-
-  end: ConnectionHandle;
-
-}
-
-export interface FloatingConnection extends BaseConnection {
-
-  end: Point;
-
-}
-
-export type Connection = PinnedConnection | FloatingConnection;

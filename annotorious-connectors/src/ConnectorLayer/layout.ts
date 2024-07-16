@@ -1,7 +1,28 @@
 import type { ImageAnnotation } from '@annotorious/annotorious';
-import type { ConnectionHandle, Direction, Orientation, PinnedConnection } from 'src/Types';
+import { roundCorners } from 'svg-round-corners';
+import type { 
+  Connection, 
+  ConnectionHandle, 
+  Direction, 
+  FloatingConnectionHandle, 
+  PinnedConnectionHandle
+ } from 'src/Types';
 
-const getHandles = (annotation: ImageAnnotation): ConnectionHandle[] => {
+const isFloatingConnectionHandle = (arg: any): arg is FloatingConnectionHandle => 
+  arg.point !== undefined && 
+  typeof arg.point.x === 'number' && 
+  typeof arg.point.y === 'number';
+
+const invert = (dir: Direction): Direction =>
+  dir === 'E' ? 'W' :
+  dir === 'W' ? 'E' :
+  dir === 'S' ? 'N' :
+  'S';
+
+/** 
+ * Returns all handles for this image annotation.
+ */
+const getHandles = (annotation: ImageAnnotation): PinnedConnectionHandle[] => {
   // TODO for prototyping, we're treating everything as a box...
   const { minX, minY, maxX, maxY } = annotation.target.selector.geometry.bounds;
 
@@ -9,109 +30,116 @@ const getHandles = (annotation: ImageAnnotation): ConnectionHandle[] => {
   const h = maxY - minY;
 
   return [
-    { point: { x: minX + w / 2, y: maxY }, direction: 'NORTH' }, // top
-    { point: { x: maxX, y: minY + h / 2 }, direction: 'EAST' },  // right
-    { point: { x: minX + w / 2, y: minY }, direction: 'SOUTH' }, // bottom
-    { point: { x: minX, y: minY + h / 2 }, direction: 'WEST' }   // left
+    { point: { x: minX + w / 2, y: maxY }, direction: 'N' }, // top
+    { point: { x: maxX, y: minY + h / 2 }, direction: 'E' },  // right
+    { point: { x: minX + w / 2, y: minY }, direction: 'S' }, // bottom
+    { point: { x: minX, y: minY + h / 2 }, direction: 'W' }   // left
   ];
 }
 
-const orientation = (handle: ConnectionHandle): Orientation =>
-  (handle.direction === 'EAST' || handle.direction === 'WEST') ? 'HORIZONTAL' : 'VERTICAL';
+/**
+ * Enumerate possible I-, L- and S-path layouts between two handles. (Reminder:
+ * a handle has an x/y position and a starting direction.)
+ */
+const enumeratePathLayouts = (start: PinnedConnectionHandle, end: ConnectionHandle) => {
+  const dx = end.point.x - start.point.x;
+  const dy = end.point.y - start.point.y;
 
-const invertDirection = (handle: ConnectionHandle): Direction =>
-  handle.direction === 'EAST' ? 'WEST' :
-  handle.direction === 'WEST' ? 'EAST' :
-  handle.direction === 'SOUTH' ? 'NORTH' :
-  'SOUTH';
+  const sd = start.direction;
+  const ed = 'direction' in end ? invert(end.direction) : undefined;
 
-const computePinnedConnection = (source: ConnectionHandle, target: ConnectionHandle): PinnedConnection => {
-  if (orientation(source) === orientation(target)) {
-    // S-connector
-    const isUpward = target.point.y < source.point.y;
-    const isLeft = target.point.x < source.point.x;
+  const pathLayouts = [
+    { dx: (dx: number) => dx < 0, dy: (dy: number) => dy > 0,   layouts: ['W-N', 'N-W', 'W-N-W', 'N-W-N']},
+    { dx: (dx: number) => dx < 0, dy: (dy: number) => dy === 0, layouts: ['W']},
+    { dx: (dx: number) => dx < 0, dy: (dy: number) => dy < 0,   layouts: ['W-S', 'S-W', 'W-S-W', 'S-W-S']},
+    { dx: (dx: number) => dx === 0, dy: (dy: number) => dy > 0, layouts: ['N'] },
+    { dx: (dx: number) => dx === 0, dy: (dy: number) => dy < 0, layouts: ['S'] },
+    { dx: (dx: number) => dx > 0, dy: (dy: number) => dy > 0,   layouts: ['E-N', 'N-E', 'E-N-E', 'N-E-N']},
+    { dx: (dx: number) => dx > 0, dy: (dy: number) => dy === 0, layouts: ['E']},
+    { dx: (dx: number) => dx > 0, dy: (dy: number) => dy < 0,   layouts: ['E-S', 'S-E', 'E-S-E', 'S-E-S']}
+  ];
 
-    return {
-      start: source,
-      segments: [{
-        direction: source.direction,
-        length: 'HALF'
-      }, {
-        direction: orientation(source) === 'VERTICAL' 
-          ? isLeft ? 'WEST' : 'EAST'
-          : isUpward ? 'NORTH' : 'SOUTH',
-        length: 'FULL'
-      }, {
-        direction: invertDirection(target),
-        length: 'HALF'
-      }],
-      end: target
-    };
-  } else {
-    // L-connector
-    return {
-      start: source,
-      segments: [{
-        direction: source.direction,
-        length: 'FULL'
-      }, {
-        direction: invertDirection(target),
-        length: 'FULL'
-      }],
-      end: target
-    };
-  }
+  // Paths that work for this dx/dy combination
+  const potentialLayouts = pathLayouts.filter(row => row.dx(dx) && row.dy(dy));
+
+  // Paths that work for this dx/dy combination and start/end direction
+  return potentialLayouts.reduce<string[]>((all, row) => {
+    const validLayouts = row.layouts.filter(l => 
+      l.startsWith(sd) && (!ed || l.endsWith(ed)));
+    return [...all, ...validLayouts];
+  }, [])
 }
 
-export const computeLayout = (source: ImageAnnotation, target: ImageAnnotation) => {
-  // Step 1: compute all possible connections, between all cardinal directions (= 16 possibilities)
+/** 
+ * Enumerates all possible I-, L- and S-path layouts between all handles on 
+ * the given image annotations.
+ */
+const enumerateConnections = (source: ImageAnnotation, target: FloatingConnectionHandle | ImageAnnotation) => {
   const sourceHandles = getHandles(source);
-  const targetHandles = getHandles(target);
+  const targetHandles: ConnectionHandle[] = isFloatingConnectionHandle(target) ? [target] : getHandles(target);
 
-  const connections: PinnedConnection[] = [];
+  const connections: Connection[] = [];
 
-  sourceHandles.forEach(sourceHandle => {
-    targetHandles.forEach(targetHandle => {
-      const connection = computePinnedConnection(sourceHandle, targetHandle);
-      connections.push(connection);
+  sourceHandles.forEach(start => {
+    targetHandles.forEach(end => {
+      const layouts = enumeratePathLayouts(start, end);
+      connections.push(...layouts.map(layout => ({ start, layout, end })));
     });
   });
 
   return connections;
 }
 
-type Line = { x1: number, y1: number, x2: number, y2: number };
+export const getConnection = (source: ImageAnnotation, target: FloatingConnectionHandle | ImageAnnotation) => {
+  const connections = enumerateConnections(source, target);
 
-export const computeLines = (connection: PinnedConnection) => {
-  const w = Math.abs(connection.end.point.x - connection.start.point.x);
-  const h = Math.abs(connection.end.point.y - connection.start.point.y);
+  connections.sort((a, b) => {
+    const lengthA = getLength(a);
+    const lengthB = getLength(b);
 
-  const lines = connection.segments.reduce<Line[]>((lines, segment) => {
-    const prev = lines[lines.length - 1];
+    if (lengthA !== lengthB)
+      return lengthA - lengthB;
 
-    const [x1, y1] = prev 
-      ? [prev.x2, prev.y2] 
-      : [connection.start.point.x, connection.start.point.y];
+    return countCorners(a) - countCorners(b);
+  });
 
-    let x2: number;
-    let y2: number;
+  return connections[0];
+}
 
-    if (segment.direction === 'NORTH') {
-      x2 = x1;
-      y2 = segment.length === 'HALF' ? y1 - h / 2 : y1 - h;
-    } else if (segment.direction === 'EAST') {
-      x2 = segment.length === 'HALF' ? x1 + w / 2 : x1 + w;
-      y2 = y1;
-    } else if (segment.direction === 'SOUTH') {
-      x2 = x1;
-      y2 = segment.length === 'HALF' ? y1 + h / 2 : y1 + h;
-    } else {
-      x2 = segment.length === 'HALF' ? x1 - w / 2 : x1 - w;
-      y2 = y1;
+const countCorners = (connection: Connection) => 
+  connection.layout.split('-').length - 1;
+
+const getLength = (connection: Connection) => {
+  const dx = connection.end.point.x - connection.start.point.x;
+  const dy = connection.end.point.y - connection.start.point.y;
+  return Math.abs(dx) + Math.abs(dy);
+}
+
+export const computePath = (connection: Connection, r?: number) => {
+  const segments = connection.layout.split('-') as Direction[];
+
+  const isS = segments.length === 3;
+
+  const dx = connection.end.point.x - connection.start.point.x;
+  const dy = connection.end.point.y - connection.start.point.y;
+
+  const d = segments.reduce<string>((d, direction, idx) => {
+    let delta: number;
+
+    switch (direction) {
+      case 'N': 
+      case 'S':
+        delta = (!isS || idx === 1) ? dy : dy / 2;
+        return `${d} v ${delta}`;
+
+      case 'E': 
+      case 'W':
+        delta = (!isS || idx === 1) ? dx : dx / 2;
+        return `${d} h ${delta}`;
     }
+  }, `M ${connection.start.point.x} ${connection.start.point.y}`);
 
-    return [...lines, { x1, y1, x2, y2 }]
-  }, []);
+  const rounded = r !== undefined && r > 0 ? roundCorners(d, r).path : d;
 
-  return lines;
+  return { start: connection.start.point, end: connection.end.point, d: rounded };
 }

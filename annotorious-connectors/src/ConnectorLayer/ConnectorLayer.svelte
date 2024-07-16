@@ -1,11 +1,8 @@
 <script lang="ts">
-  import { getSVGPoint, type ImageAnnotation, type SvelteImageAnnotatorState } from '@annotorious/annotorious';
-  import RubberbandConnector from './RubberbandConnector.svelte';
-  import type { Connection, Direction, PinnedConnection, Point } from 'src/Types';
-  import { getMidpoints } from '../elbow';
-  import { getClosest, getClosestPair, getStartDirection } from './geom';
-    import { computeLayout } from './layout';
-    import ElbowConnector from './ElbowConnector.svelte';
+  import { getSVGPoint } from '@annotorious/annotorious';
+  import type { ImageAnnotation, SvelteImageAnnotatorState } from '@annotorious/annotorious';
+  import { computePath, getConnection } from './layout';
+  import type { Point } from 'src/Types';
 
   /** Props */
   export let source: ImageAnnotation | undefined;
@@ -14,13 +11,7 @@
   /** Responsive scaling **/
   let svgEl: SVGSVGElement;
 
-  /** Elbow connector start & end points **/
-  let start: Point | undefined;
-  let startDirection: Direction | undefined;
-  let end: Point | undefined;
-  let endDirection: Direction | undefined;
-
-  let connections: PinnedConnection[] = [];
+  let path: { start: Point, end: Point, d: string } | undefined;
 
   const { store } = state;
 
@@ -29,25 +20,16 @@
 
     const pt = getSVGPoint(evt, svgEl);
 
-    const sourceMidpoints = getMidpoints(source);
-
     const target = store.getAt(pt.x, pt.y);
     if (target) {
-      connections = computeLayout(source, target);
-
-      // Connect source annotation with target annotation
-      const targetMidpoints = getMidpoints(target);
-      const { from , to } = getClosestPair(sourceMidpoints, targetMidpoints);
-      start = from;
-      startDirection = getStartDirection(source, from);
-      end = to;
-      endDirection = getStartDirection(target, to);
+      const connection = getConnection(source, target);
+      if (connection)
+        path = computePath(connection, 6);
+      else 
+        path = undefined;
     } else {
-      // Connect source annotation with mouse position
-      start = getClosest(sourceMidpoints, pt);
-      startDirection = getStartDirection(source, pt);
-      end = pt;
-      endDirection = undefined;
+      const connection = getConnection(source, { point: pt });
+      path = computePath(connection, 6);
     }
   }
 </script>
@@ -58,15 +40,11 @@
   class:active={source}
   on:pointermove={onPointerMove}>
   <g>
-    <RubberbandConnector
-      start={start} 
-      startDirection={startDirection} 
-      end={end} 
-      endDirection={endDirection} />
-
-    {#each connections as connection}
-      <ElbowConnector connection={connection} />
-    {/each}
+    {#if path}
+      <path d={path.d} fill="transparent" stroke="red" />
+      <circle cx={path.start.x} cy={path.start.y} r="6" fill="green" />
+      <circle cx={path.end.x} cy={path.end.y} r="6" fill="blue" />
+    {/if}
   </g>
 </svg>
 
