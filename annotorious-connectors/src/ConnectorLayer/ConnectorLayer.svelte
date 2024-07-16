@@ -41,9 +41,14 @@
   on:pointermove={onPointerMove}>
   <g>
     {#if path}
-      <path d={path.d} fill="transparent" stroke="red" />
-      <circle cx={path.start.x} cy={path.start.y} r="6" fill="green" />
-      <circle cx={path.end.x} cy={path.end.y} r="6" fill="blue" />
+      <path class="a9s-path-outer" d={path.d} />  
+      <path class="a9s-path-inner" d={path.d} />
+
+      <circle class="a9s-path-handle-outer" cx={path.start.x} cy={path.start.y} r="4"/>
+      <circle class="a9s-path-handle-inner" cx={path.start.x} cy={path.start.y} r="4"/>
+
+      <circle class="a9s-path-handle-outer" cx={path.end.x} cy={path.end.y} r="4" />
+      <circle class="a9s-path-handle-inner" cx={path.end.x} cy={path.end.y} r="4" />
     {/if}
   </g>
 </svg>
@@ -60,5 +65,34 @@
 
   svg.active {
     pointer-events: all;
+  }
+
+  svg path {
+    fill: transparent;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  svg path.a9s-path-outer {
+    stroke: #00000040;
+    stroke-width: 3.5px;
+  }
+
+  svg path.a9s-path-inner {
+    stroke: #fff;
+    stroke-width: 1.5px;
+    stroke-dasharray: 3 3;
+  }
+
+  svg circle.a9s-path-handle-outer {
+    fill: #00000040;
+    stroke: #00000040;
+    stroke-width: 3;
+  }
+
+  svg circle.a9s-path-handle-inner {
+    stroke: #fff;
+    stroke-width: 1.5;
+    fill: #000;
   }
 </style>
