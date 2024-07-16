@@ -1,9 +1,9 @@
 <script lang="ts">
   import { getSVGPoint } from '@annotorious/annotorious';
   import type { ImageAnnotation, SvelteImageAnnotatorState } from '@annotorious/annotorious';
-  import { getConnection } from './layout';
+  import { getConnection } from '../layout';
   import Connector from './Connector.svelte';
-  import type { Connection } from 'src/Types';
+  import type { Connection } from 'src/model/Connection';
 
   /** Props */
   export let source: ImageAnnotation | undefined;

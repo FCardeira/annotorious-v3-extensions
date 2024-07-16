@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { computePath } from './layout';
-  import type { Connection } from 'src/Types';
+  import { computePath } from '../layout';
+  import type { Connection } from 'src/model/Connection';
 
   export let connection: Connection;
 

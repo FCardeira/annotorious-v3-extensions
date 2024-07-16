@@ -7,7 +7,7 @@ import type {
   FloatingConnectionHandle, 
   Path, 
   PinnedConnectionHandle
- } from 'src/Types';
+ } from './model';
 
 const isFloatingConnectionHandle = (arg: any): arg is FloatingConnectionHandle => 
   arg.point !== undefined && 
