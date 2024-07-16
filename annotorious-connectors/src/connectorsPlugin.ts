@@ -7,6 +7,8 @@ import type {
 
 export const mountPlugin = (anno: ImageAnnotator) => {
 
+  let isEnabled = false;
+
   const connectorLayer = new ConnectorLayer({
     target: anno.element,
     props: {
@@ -16,17 +18,27 @@ export const mountPlugin = (anno: ImageAnnotator) => {
   });
 
   const onSelectionChanged = (selection: ImageAnnotation[]) => {
-    const selected = (selection || [])[0];
-    connectorLayer.$set({ source: selected });
+    if (isEnabled) {
+      const selected = (selection || [])[0];
+      connectorLayer.$set({ source: selected });
+    }
   }
 
   anno.on('selectionChanged', onSelectionChanged);
+
+  /** API **/
+
+  const setEnabled = (enabled: boolean) => {
+    isEnabled = enabled;
+    connectorLayer.$set({ source: undefined });
+  }
 
   const unmount = () => {
     anno.off('selectionChanged', onSelectionChanged);
   }
 
   return { 
+    setEnabled,
     unmount
   }
 
