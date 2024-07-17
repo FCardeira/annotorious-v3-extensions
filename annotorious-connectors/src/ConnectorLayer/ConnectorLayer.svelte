@@ -4,7 +4,7 @@
   import { getConnection } from '../layout';
   import type { Connection, ConnectionHandle, PinnedConnectionHandle } from '../model';
   import type { ConnectionGraph } from '../state';
-  import Connector from './Connector.svelte';
+  import Connector from './RubberbandConnector.svelte';
 
   /** Props */
   export let graph: ConnectionGraph;
@@ -50,15 +50,21 @@
 
 <svg 
   bind:this={svgEl}
-  class="a9s-connectors"
+  class="a9s-connector-layer"
   class:active={source}
   on:pointermove={onPointerMove}
   on:pointerdown={onPointerDown}>
-  <g>
-    {#if connection}
-      <Connector connection={connection} />
-    {/if}
+  <g class="a9s-connectors">
+    {#each graph.links as link}
+
+    {/each}
   </g>
+
+  {#if connection}
+    <g class="a9s-rubberband">
+      <Connector connection={connection} />
+    </g>
+  {/if}
 </svg>
 
 <style>
