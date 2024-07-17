@@ -2,10 +2,12 @@
   import { getSVGPoint } from '@annotorious/annotorious';
   import type { ImageAnnotation, SvelteImageAnnotatorState } from '@annotorious/annotorious';
   import { getConnection } from '../layout';
+  import type { Connection, ConnectionHandle, PinnedConnectionHandle } from '../model';
+  import type { ConnectionGraph } from '../state';
   import Connector from './Connector.svelte';
-  import type { Connection } from 'src/model/Connection';
 
   /** Props */
+  export let graph: ConnectionGraph;
   export let source: ImageAnnotation | undefined;
   export let state: SvelteImageAnnotatorState;
 
@@ -17,6 +19,21 @@
   $: if (!source) connection = undefined;
 
   const { store } = state;
+
+  const isPinned = (handle?: ConnectionHandle): handle is PinnedConnectionHandle => 
+    handle !== undefined && 'direction' in handle;
+
+  const onPointerDown = () => {
+    if (isPinned(connection?.end)) {
+      const from = connection.start.annotation.id;
+      const to = connection.end.annotation.id;
+
+      graph.addLink(from, to);
+
+      source = undefined;
+      connection = undefined;
+    }
+  }
 
   const onPointerMove = (evt: PointerEvent) => {
     if (!source) return;
@@ -35,7 +52,8 @@
   bind:this={svgEl}
   class="a9s-connectors"
   class:active={source}
-  on:pointermove={onPointerMove}>
+  on:pointermove={onPointerMove}
+  on:pointerdown={onPointerDown}>
   <g>
     {#if connection}
       <Connector connection={connection} />

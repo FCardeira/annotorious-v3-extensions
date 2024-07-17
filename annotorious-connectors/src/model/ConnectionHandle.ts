@@ -1,3 +1,4 @@
+import type { Annotation } from '@annotorious/annotorious';
 import type { Point } from './Point';
 
 export type Direction = 'N' | 'E' | 'S' | 'W';
@@ -9,6 +10,8 @@ export interface FloatingConnectionHandle {
 }
 
 export interface PinnedConnectionHandle extends FloatingConnectionHandle {
+
+  annotation: Annotation;
 
   direction: Direction;
 

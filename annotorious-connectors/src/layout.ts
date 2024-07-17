@@ -7,7 +7,7 @@ import type {
   FloatingConnectionHandle, 
   Path, 
   PinnedConnectionHandle
- } from './model';
+} from './model';
 
 const isFloatingConnectionHandle = (arg: any): arg is FloatingConnectionHandle => 
   arg.point !== undefined && 
@@ -31,10 +31,10 @@ const getHandles = (annotation: ImageAnnotation): PinnedConnectionHandle[] => {
   const h = maxY - minY;
 
   return [
-    { point: { x: minX + w / 2, y: maxY }, direction: 'N' }, // top
-    { point: { x: maxX, y: minY + h / 2 }, direction: 'E' },  // right
-    { point: { x: minX + w / 2, y: minY }, direction: 'S' }, // bottom
-    { point: { x: minX, y: minY + h / 2 }, direction: 'W' }   // left
+    { point: { x: minX + w / 2, y: maxY }, annotation, direction: 'N' }, // top
+    { point: { x: maxX, y: minY + h / 2 }, annotation, direction: 'E' }, // right
+    { point: { x: minX + w / 2, y: minY }, annotation, direction: 'S' }, // bottom
+    { point: { x: minX, y: minY + h / 2 }, annotation, direction: 'W' }  // left
   ];
 }
 
