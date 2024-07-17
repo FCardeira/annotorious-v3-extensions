@@ -32,7 +32,10 @@
 
   <body>
     <div id="content">    
-      <button id="relations">Mode: Annotate</button>
+      <div>
+        <button id="relations">Mode: Annotate</button>
+      </div>
+
       <img id="sample-image" src="640px-Hallstatt.jpg" />
     </div>
 
@@ -51,12 +54,13 @@
 
         var button = document.getElementById('relations');
         button.addEventListener('click', function() {
-          console.log(button.innerText);
           if (button.innerText === 'Mode: Annotate') {
             button.innerText = 'Mode: Relations';
+            anno.setUserSelectAction('SELECT');
             connectors.setEnabled(true);
           } else {
             button.innerText = 'Mode: Annotate';
+            anno.setUserSelectAction('EDIT');
             connectors.setEnabled(false);
           }
         });

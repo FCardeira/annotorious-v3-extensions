@@ -14,6 +14,8 @@
 
   let connection: Connection | undefined;
 
+  $: if (!source) connection = undefined;
+
   const { store } = state;
 
   const onPointerMove = (evt: PointerEvent) => {
