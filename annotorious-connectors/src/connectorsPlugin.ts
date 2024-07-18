@@ -1,9 +1,10 @@
+import { createNanoEvents, type Unsubscribe } from 'nanoevents';
 import { ConnectorLayer } from './ConnectorLayer';
 import { createConnectionGraph } from './state/ConnectionGraph';
 import type { 
   ImageAnnotator,
   ImageAnnotation, 
-  SvelteImageAnnotatorState 
+  SvelteImageAnnotatorState
 } from '@annotorious/annotorious';
 
 export const mountPlugin = (anno: ImageAnnotator) => {

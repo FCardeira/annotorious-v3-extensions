@@ -23,6 +23,7 @@
     "@annotorious/annotorious": "../../annotorious/packages/annotorious"
   },
   "dependencies": {
+    "nanoevents": "^9.0.0",
     "svg-round-corners": "^0.4.3",
     "uuid": "^10.0.0"
   }
