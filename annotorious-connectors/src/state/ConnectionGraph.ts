@@ -1,15 +1,6 @@
+import { writable } from 'svelte/store';
 import { v4 as uuidv4 } from 'uuid';
 import type { AnnotatorState, ImageAnnotation } from '@annotorious/annotorious';
-
-export interface ConnectionGraph {
-
-  addLink(from: string, to: string): Link;
-
-  links: Link[];
-
-  nodes: string[];
-
-}
 
 interface Link {
 
@@ -21,19 +12,21 @@ interface Link {
 
 }
 
-export const createConnectionGraph = (state: AnnotatorState<ImageAnnotation>): ConnectionGraph => {
+export type ConnectionGraph = ReturnType<typeof createConnectionGraph>;
 
-  // Annotation IDs
-  const nodes: string[] = [];
-  
-  // Connection annotations (id, from, to)
-  const links: Link[] = [];
+export const createConnectionGraph = (state: AnnotatorState<ImageAnnotation>) => {
+
+  const { subscribe, set } = writable<Link[]>([]);
+
+  let links: Link[] = [];
+
+  subscribe(l => links = l);
 
   const addLink = (from: string, to: string) => {
     const id = uuidv4();
     const link = { id, from, to };
 
-    links.push({...link});
+    set([...links, {...link}]);
 
     return link;
   }
@@ -41,7 +34,7 @@ export const createConnectionGraph = (state: AnnotatorState<ImageAnnotation>): C
   return {
     addLink,
     links,
-    nodes
+    subscribe
   }
 
 }
