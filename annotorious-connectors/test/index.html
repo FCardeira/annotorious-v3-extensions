@@ -40,15 +40,17 @@
     </div>
 
     <script type="module">
-      import { createImageAnnotator } from '@annotorious/annotorious';
+      import { createImageAnnotator, W3CImageFormat } from '@annotorious/annotorious';
       import { mountPlugin } from '../src';
 
       import '@annotorious/annotorious/annotorious.css';
 
       window.onload = function() {        
-        var anno = createImageAnnotator('sample-image');
+        var anno = createImageAnnotator('sample-image', {
+          adapter: W3CImageFormat('sample-image')
+        });
 
-        anno.loadAnnotations('./annotations.json');
+        anno.loadAnnotations('./annotations.w3c.json');
         
         anno.on('createAnnotation', annotation => console.log('created', annotation));
 
