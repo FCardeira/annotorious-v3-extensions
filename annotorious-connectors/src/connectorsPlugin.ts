@@ -1,11 +1,12 @@
 import { ConnectorLayer } from './ConnectorLayer';
 import type { 
   ImageAnnotator,
-  ImageAnnotation, 
   SvelteImageAnnotatorState
 } from '@annotorious/annotorious';
 
 export const mountPlugin = (anno: ImageAnnotator) => {
+
+  const { store, selection } = anno.state;
 
   let isEnabled = false;
 
@@ -17,14 +18,12 @@ export const mountPlugin = (anno: ImageAnnotator) => {
     }
   });
 
-  const onSelectionChanged = (selection: ImageAnnotation[]) => {
-    if (isEnabled) {
-      const selected = (selection || [])[0];
-      connectorLayer.$set({ source: selected });
+  const unsubscribe = selection.subscribe(({ selected }) => {
+    if (isEnabled && selected.length > 0) {
+      const source = store.getAnnotation(selected[0].id);
+      connectorLayer.$set(({ source }));
     }
-  }
-
-  anno.on('selectionChanged', onSelectionChanged);
+  });
 
   /** API **/
 
@@ -34,7 +33,7 @@ export const mountPlugin = (anno: ImageAnnotator) => {
   }
 
   const unmount = () => {
-    anno.off('selectionChanged', onSelectionChanged);
+    unsubscribe();
   }
 
   return { 
