@@ -13,11 +13,9 @@ export interface ConnectionAnnotationTarget extends AnnotationTarget {
 
   selector: {
 
-    from: ConnectedTarget;
+    from: string;
 
-    to: ConnectedTarget;  
+    to: string;  
   }
 
 }
-
-export type ConnectedTarget = string | Point;

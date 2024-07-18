@@ -87,11 +87,10 @@
     "bodies": [],
     "target": {
       "annotation": "7254e2f8-52d5-4559-8074-d058edde4445",
-      "type": "Collection",
-      "items": [
-        "bc4e604c-c06a-4c2f-bed0-175114a2b8a1",
-        "caae9eb1-d1a3-4e2c-8c5b-e939c1650da9"
-      ],
+      "selector": {
+        "from": "bc4e604c-c06a-4c2f-bed0-175114a2b8a1",
+        "to": "caae9eb1-d1a3-4e2c-8c5b-e939c1650da9"
+      },
       "creator": {
         "isGuest": true,
         "id": "HVM488X4oICQNzQaKNXd"

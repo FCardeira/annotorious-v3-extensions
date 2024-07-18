@@ -1,21 +1,21 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { v4 as uuidv4 } from 'uuid';
   import { getSVGPoint } from '@annotorious/annotorious';
   import type { Annotation, ImageAnnotation, StoreChangeEvent, SvelteImageAnnotatorState } from '@annotorious/annotorious';
   import { getConnection } from '../layout';
   import type { Connection, ConnectionAnnotation, ConnectionHandle, PinnedConnectionHandle } from '../model';
-  import type { ConnectionGraph } from '../state';
   import Connector from './Connector.svelte';
   import RubberbandConnector from './RubberbandConnector.svelte';
-    import { onMount } from 'svelte';
 
   /** Props */
-  export let graph: ConnectionGraph;
   export let source: ImageAnnotation | undefined;
   export let state: SvelteImageAnnotatorState;
 
   /** Responsive scaling **/
   let svgEl: SVGSVGElement;
+
+  let connections: ConnectionAnnotation[] = [];
 
   let connection: Connection | undefined;
 
@@ -46,8 +46,6 @@
       // @ts-ignore
       store.addAnnotation(annotation);
 
-      graph.addLink(from, to);
-
       source = undefined;
       connection = undefined;
     }
@@ -70,8 +68,8 @@
       const { created, updated, deleted } = event.changes;
 
       // @ts-ignore
-      const addedConnections = (created || []).filter(a => a.motivation === 'linking');
-      console.log('adding', addedConnections);
+      const addedConnections: ConnectionAnnotation[] = (created || []).filter(a => a.motivation === 'linking');
+      connections = [...connections, ...addedConnections];
     }
 
     store.observe(onChange);
@@ -89,10 +87,9 @@
   on:pointermove={onPointerMove}
   on:pointerdown={onPointerDown}>
   <g class="a9s-connectors">
-    {#each $graph as link}
+    {#each connections as connection}
       <Connector
-        from={link.from}
-        to={link.to} 
+        annotation={connection}
         state={state} />
     {/each}
   </g>

@@ -1,6 +1,4 @@
-import { createNanoEvents, type Unsubscribe } from 'nanoevents';
 import { ConnectorLayer } from './ConnectorLayer';
-import { createConnectionGraph } from './state/ConnectionGraph';
 import type { 
   ImageAnnotator,
   ImageAnnotation, 
@@ -9,14 +7,11 @@ import type {
 
 export const mountPlugin = (anno: ImageAnnotator) => {
 
-  const graph = createConnectionGraph(anno.state);
-
   let isEnabled = false;
 
   const connectorLayer = new ConnectorLayer({
     target: anno.element,
     props: {
-      graph,
       source: undefined,
       state: anno.state as SvelteImageAnnotatorState
     }

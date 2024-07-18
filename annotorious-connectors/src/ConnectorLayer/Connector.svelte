@@ -2,25 +2,31 @@
   import { onMount } from 'svelte';
   import type { ImageAnnotation, StoreChangeEvent, SvelteImageAnnotatorState } from '@annotorious/annotorious';
   import { computePath, getConnection } from '../layout';
+  import type { ConnectionAnnotation } from 'src/model';
 
   /** Props */
-  export let from: string;
+  export let annotation: ConnectionAnnotation;
   export let state: SvelteImageAnnotatorState;
-  export let to: string;
 
   const { store } = state;
 
-  let connection = getConnection(store.getAnnotation(from)!, store.getAnnotation(to)!);
+  const computeConnection = (annotation: ConnectionAnnotation) =>
+    getConnection(
+      store.getAnnotation(annotation.target.selector.from)!, 
+      store.getAnnotation(annotation.target.selector.to)!);
+
+  $: connection = computeConnection(annotation);
 
   onMount(() => {
     const onChange = (event: StoreChangeEvent<ImageAnnotation>) => {
       // We'll only check for 'updated' events and ignore delete (handled upwards in the layer)
       const { updated } = event.changes;
 
-      connection = getConnection(store.getAnnotation(from)!, store.getAnnotation(to)!);
+      connection = computeConnection(annotation);
     }
 
     // Observe changes to start- and end-annotation
+    const { from , to } = annotation.target.selector;
     store.observe(onChange, { annotations: [from, to]});
 
     return () => {

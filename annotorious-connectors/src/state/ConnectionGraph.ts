@@ -4,7 +4,7 @@ import { createNanoEvents } from 'nanoevents';
 import type { AnnotatorState, ImageAnnotation } from '@annotorious/annotorious';
 import type { ConnectionGraphEvents } from './ConnectionGraphEvents';
 
-interface Link {
+export interface Link {
 
   id: string;
 
