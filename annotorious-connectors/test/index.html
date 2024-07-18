@@ -49,6 +49,8 @@
         var anno = createImageAnnotator('sample-image');
 
         anno.loadAnnotations('./annotations.json');
+        
+        anno.on('createAnnotation', annotation => console.log('created', annotation));
 
         const connectors = mountPlugin(anno);
 

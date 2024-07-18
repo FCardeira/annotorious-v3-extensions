@@ -11,9 +11,12 @@ export interface ConnectionAnnotation extends Annotation {
 
 export interface ConnectionAnnotationTarget extends AnnotationTarget {
 
-  type: 'Collection';
+  selector: {
 
-  items: ConnectedTarget[];
+    from: ConnectedTarget;
+
+    to: ConnectedTarget;  
+  }
 
 }
 

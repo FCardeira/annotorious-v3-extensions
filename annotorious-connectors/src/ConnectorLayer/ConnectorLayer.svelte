@@ -1,11 +1,13 @@
 <script lang="ts">
+  import { v4 as uuidv4 } from 'uuid';
   import { getSVGPoint } from '@annotorious/annotorious';
-  import type { ImageAnnotation, SvelteImageAnnotatorState } from '@annotorious/annotorious';
+  import type { Annotation, ImageAnnotation, StoreChangeEvent, SvelteImageAnnotatorState } from '@annotorious/annotorious';
   import { getConnection } from '../layout';
-  import type { Connection, ConnectionHandle, PinnedConnectionHandle } from '../model';
+  import type { Connection, ConnectionAnnotation, ConnectionHandle, PinnedConnectionHandle } from '../model';
   import type { ConnectionGraph } from '../state';
   import Connector from './Connector.svelte';
   import RubberbandConnector from './RubberbandConnector.svelte';
+    import { onMount } from 'svelte';
 
   /** Props */
   export let graph: ConnectionGraph;
@@ -29,6 +31,21 @@
       const from = connection.start.annotation.id;
       const to = connection.end.annotation.id;
 
+      const id = uuidv4();
+
+      const annotation: ConnectionAnnotation = {
+        id,
+        motivation: 'linking',
+        bodies: [],
+        target: {
+          annotation: id,
+          selector: { from, to }
+        }
+      }
+
+      // @ts-ignore
+      store.addAnnotation(annotation);
+
       graph.addLink(from, to);
 
       source = undefined;
@@ -47,6 +64,22 @@
     else
       connection = getConnection(source, { point: pt });
   }
+
+  onMount(() => {
+    const onChange = (event: StoreChangeEvent<Annotation>) => {
+      const { created, updated, deleted } = event.changes;
+
+      // @ts-ignore
+      const addedConnections = (created || []).filter(a => a.motivation === 'linking');
+      console.log('adding', addedConnections);
+    }
+
+    store.observe(onChange);
+
+    return () => {
+      store.unobserve(onChange);
+    }
+  });
 </script>
 
 <svg 
@@ -66,7 +99,8 @@
 
   {#if connection}
     <g class="a9s-rubberband">
-      <RubberbandConnector connection={connection} />
+      <RubberbandConnector 
+        connection={connection} />
     </g>
   {/if}
 </svg>
