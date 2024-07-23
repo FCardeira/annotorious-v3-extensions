@@ -1,5 +1,4 @@
 import type { Annotation, AnnotationTarget } from '@annotorious/annotorious';
-import type { Point } from './Point';
 
 export interface ConnectionAnnotation extends Annotation {
 

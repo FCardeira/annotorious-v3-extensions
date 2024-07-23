@@ -40,14 +40,14 @@
     </div>
 
     <script type="module">
-      import { createImageAnnotator, W3CImageFormat } from '@annotorious/annotorious';
-      import { mountPlugin } from '../src';
+      import { createImageAnnotator } from '@annotorious/annotorious';
+      import { mountPlugin, W3CImageRelationFormat } from '../src';
 
       import '@annotorious/annotorious/annotorious.css';
 
       window.onload = function() {        
         var anno = createImageAnnotator('sample-image', {
-          adapter: W3CImageFormat('sample-image', { strict: false })
+          adapter: W3CImageRelationFormat('sample-image')
         });
 
         anno.loadAnnotations('./annotations.w3c.json');
