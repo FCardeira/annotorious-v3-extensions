@@ -47,7 +47,7 @@
 
       window.onload = function() {        
         var anno = createImageAnnotator('sample-image', {
-          adapter: W3CImageFormat('sample-image')
+          adapter: W3CImageFormat('sample-image', { strict: false })
         });
 
         anno.loadAnnotations('./annotations.w3c.json');
