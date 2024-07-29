@@ -25,7 +25,6 @@ export default defineConfig({
     },
     rollupOptions: {
       external: [
-        ...Object.keys(packageJson.peerDependencies),
         '@annotorious/core',
         '@annotorious/annotorious',
         '@annotorious/openseadragon'

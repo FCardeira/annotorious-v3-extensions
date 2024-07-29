@@ -2,13 +2,26 @@
   "name": "@annotorious/plugin-connectors",
   "version": "0.1.0",
   "description": "An Annotorious plugin for drawing elbow connectors between annotations.",
-  "main": "src/index.ts",
   "author": "Rainer Simon",
   "license": "BSD-3-Clause",
   "type": "module",
   "scripts": {
     "start": "vite",
     "build": "vite build"
+  },
+  "main": "./dist/annotorious-connectors.js",
+  "module": "./dist/annotorious-connectors.es.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/annotorious-connectors.es.js",
+      "require": "./dist/annotorious-connectors.js"
+    },
+    "./annotorious-connectors.css": "./dist/annotorious-connectors.css"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^3.1.1",

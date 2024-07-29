@@ -19,11 +19,9 @@
     "vite-plugin-dts": "^3.9.1",
     "vite-tsconfig-paths": "^4.3.2"
   },
-  "peerDependencies": {
-    "@annotorious/react": "3.0.0-rc.31"
-  },
   "dependencies": {
-    "@annotorious/plugin-connectors": "0.1.0"
+    "@annotorious/plugin-connectors": "0.1.0",
+    "@annotorious/react": "3.0.0-rc.31"
   },
   "sideEffects": false
 }

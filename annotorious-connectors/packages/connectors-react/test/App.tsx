@@ -1,5 +1,7 @@
-import { ImageAnnotator, useAnnotator, W3CImageFormat } from '@annotorious/react';
 import React, { useEffect, useState } from 'react';
+import { ImageAnnotator, useAnnotator } from '@annotorious/react';
+import { W3CImageRelationFormat } from '@annotorious/plugin-connectors'; 
+import { ConnectorPlugin } from '../src';
 
 export const App = () => {
 
@@ -22,9 +24,12 @@ export const App = () => {
       </div>
 
       <ImageAnnotator
-        adapter={W3CImageFormat('640px-Hallstatt.jpg')}>
+        // @ts-ignore
+        adapter={W3CImageRelationFormat('640px-Hallstatt.jpg')}>
         <img src="640px-Hallstatt.jpg" />
       </ImageAnnotator>
+
+      <ConnectorPlugin />
     </div>
   )
 

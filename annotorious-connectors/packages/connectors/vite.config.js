@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
-import sveltePreprocess from 'svelte-preprocess';
+import { sveltePreprocess } from 'svelte-preprocess';
 import dts from 'vite-plugin-dts';
 
 import * as packageJson from './package.json';
@@ -21,20 +21,17 @@ export default defineConfig({
     sourcemap: true,
     lib: {
       entry: './src/index.ts',
-      name: 'OSDTextLayer',
+      name: 'AnnotoriousConnectors',
       formats: ['es', 'umd'],
       fileName: (format) => 
-        format === 'umd' ? `annotorious-openseadragon-textlayer.js` : `annotorious-openseadragon-textlayer.es.js` 
+        format === 'umd' ? `annotorious-connectors.js` : `annotorious-connectors.es.js` 
     },
     rollupOptions: {
       external: [
         ...Object.keys(packageJson.peerDependencies)
       ],
       output: {
-        assetFileNames: 'annotorious-openseadragon-textlayer.[ext]',
-        globals: {
-          openseadragon: 'OpenSeadragon'
-        }
+        assetFileNames: 'annotorious-connectors.[ext]'
       }
     }
   }

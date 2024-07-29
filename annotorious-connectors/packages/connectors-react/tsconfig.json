@@ -16,9 +16,6 @@
     "moduleResolution": "node",
     "noEmit": true,
     "outDir": "dist",
-    "paths": {
-      "@annotorious/react": ["src/index.ts"]
-    },
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "sourceMap": true,

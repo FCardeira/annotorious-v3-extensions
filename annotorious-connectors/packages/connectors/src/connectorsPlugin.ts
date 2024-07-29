@@ -1,5 +1,6 @@
 import { ConnectorLayer } from './ConnectorLayer';
 import type { 
+  ImageAnnotation,
   ImageAnnotator,
   SvelteImageAnnotatorState
 } from '@annotorious/annotorious';
@@ -8,14 +9,12 @@ export const mountPlugin = (anno: ImageAnnotator) => {
 
   const { store, selection } = anno.state;
 
-  anno.setUserSelectAction
-
   let isEnabled = false;
 
   const connectorLayer = new ConnectorLayer({
     target: anno.element,
     props: {
-      source: undefined,
+      source: undefined as ImageAnnotation | undefined,
       state: anno.state as SvelteImageAnnotatorState
     }
   });
