@@ -54,6 +54,8 @@
         
         anno.on('createAnnotation', annotation => console.log('created', annotation));
 
+        anno.on('selectionChanged', selected => console.log(selected));
+
         const connectors = mountPlugin(anno);
 
         var button = document.getElementById('relations');

@@ -21,7 +21,7 @@
 
   $: if (!source) connection = undefined;
 
-  const { store } = state;
+  const { selection, store } = state;
 
   const isPinned = (handle?: ConnectionHandle): handle is PinnedConnectionHandle => 
     handle !== undefined && 'direction' in handle;
@@ -78,6 +78,9 @@
       store.unobserve(onChange);
     }
   });
+
+  // Shorthand
+  $: isSelected = (id: string) => $selection.selected.some(s => s.id === id);
 </script>
 
 <svg 
@@ -90,7 +93,8 @@
     {#each connections as connection}
       <Connector
         annotation={connection}
-        state={state} />
+        state={state} 
+        isSelected={isSelected(connection.id)}/>
     {/each}
   </g>
 

@@ -7,8 +7,9 @@
   /** Props */
   export let annotation: ConnectionAnnotation;
   export let state: SvelteImageAnnotatorState;
+  export let isSelected: boolean;
 
-  const { store } = state;
+  const { selection, store } = state;
 
   const computeConnection = (annotation: ConnectionAnnotation) =>
     getConnection(
@@ -17,13 +18,10 @@
 
   $: connection = computeConnection(annotation);
 
-  onMount(() => {
-    const onChange = (event: StoreChangeEvent<ImageAnnotation>) => {
-      // We'll only check for 'updated' events and ignore delete (handled upwards in the layer)
-      const { updated } = event.changes;
+  const onPointerDown = (evt: PointerEvent) => selection.userSelect(annotation.id, evt);
 
-      connection = computeConnection(annotation);
-    }
+  onMount(() => {
+    const onChange = () => connection = computeConnection(annotation);
 
     // Observe changes to start- and end-annotation
     const { from , to } = annotation.target.selector;
@@ -38,6 +36,12 @@
 <g class="a9s-connector">
   {#if connection}
     {@const path = computePath(connection, 10)}
+    <path 
+      class="a9s-connector-path-buffer"
+      class:selected={isSelected}
+      d={path.d} 
+      on:pointerdown={onPointerDown} />
+
     <path class="a9s-connector-path-outer" d={path.d} />  
     <path class="a9s-connector-path-inner" d={path.d} />
 
@@ -54,6 +58,22 @@
     fill: transparent;
     stroke-linecap: round;
     stroke-linejoin: round;
+  }
+
+  path.a9s-connector-path-buffer {
+    cursor: pointer;
+    pointer-events:all;
+    stroke: rgba(255, 255, 255, 0);
+    stroke-width: 8px;
+    transition: stroke 125ms ease-in-out;
+  }
+
+  path.a9s-connector-path-buffer.selected {
+    stroke: rgba(255, 255, 255, 0.5);
+  }
+
+  path.a9s-connector-path-buffer:hover:not(.selected) {
+    stroke: rgba(255, 255, 255, 0.25);
   }
 
   path.a9s-connector-path-outer {

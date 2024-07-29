@@ -8,6 +8,8 @@ export const mountPlugin = (anno: ImageAnnotator) => {
 
   const { store, selection } = anno.state;
 
+  anno.setUserSelectAction
+
   let isEnabled = false;
 
   const connectorLayer = new ConnectorLayer({
