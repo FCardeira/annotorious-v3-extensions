@@ -99,9 +99,9 @@
   }
 
   circle.a9s-connector-handle-inner {
+    fill: #000;
     stroke: #fff;
     stroke-width: 1.5;
-    fill: #000;
     vector-effect: non-scaling-stroke;
   }
 </style>

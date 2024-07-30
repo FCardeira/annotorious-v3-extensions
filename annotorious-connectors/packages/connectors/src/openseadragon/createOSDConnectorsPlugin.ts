@@ -5,6 +5,7 @@ import type {
   ImageAnnotator,
   SvelteImageAnnotatorState
 } from '@annotorious/annotorious';
+import { UserSelectAction } from '@annotorious/openseadragon';
 
 export const mountOSDPlugin = (anno: ImageAnnotator, viewer: OpenSeadragon.Viewer) => {
 
@@ -33,6 +34,9 @@ export const mountOSDPlugin = (anno: ImageAnnotator, viewer: OpenSeadragon.Viewe
   const setEnabled = (enabled: boolean) => {
     isEnabled = enabled;
     connectorLayer.$set({ source: undefined });
+
+    // TODO need to revert to the original setting afterwards
+    anno.setUserSelectAction(UserSelectAction.SELECT);
   }
 
   const unmount = () => {

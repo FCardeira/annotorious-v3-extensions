@@ -3,6 +3,9 @@
   import type { Connection } from 'src/model/Connection';
 
   export let connection: Connection;
+  export let scale = 1;
+
+  $: r = 5 / scale;
 
   $: path = computePath(connection, 10);
 </script>
@@ -12,11 +15,11 @@
     <path class="a9s-connector-path-outer" d={path.d} />  
     <path class="a9s-connector-path-inner" d={path.d} />
 
-    <circle class="a9s-connector-handle-outer" cx={path.start.x} cy={path.start.y} r="4"/>
-    <circle class="a9s-connector-handle-inner" cx={path.start.x} cy={path.start.y} r="4"/>
+    <circle class="a9s-connector-handle-outer" cx={path.start.x} cy={path.start.y} r={r} />
+    <circle class="a9s-connector-handle-inner" cx={path.start.x} cy={path.start.y} r={r} />
 
-    <circle class="a9s-connector-handle-outer" cx={path.end.x} cy={path.end.y} r="4" />
-    <circle class="a9s-connector-handle-inner" cx={path.end.x} cy={path.end.y} r="4" />
+    <circle class="a9s-connector-handle-outer" cx={path.end.x} cy={path.end.y} r={r} />
+    <circle class="a9s-connector-handle-inner" cx={path.end.x} cy={path.end.y} r={r} />
   {/if}
 </g>
 
@@ -25,6 +28,7 @@
     fill: transparent;
     stroke-linecap: round;
     stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
   }
 
   path.a9s-connector-path-outer {
@@ -42,11 +46,13 @@
     fill: #00000040;
     stroke: #00000040;
     stroke-width: 3;
+    vector-effect: non-scaling-stroke;
   }
 
   circle.a9s-connector-handle-inner {
+    fill: #000;
     stroke: #fff;
     stroke-width: 1.5;
-    fill: #000;
+    vector-effect: non-scaling-stroke;
   }
 </style>

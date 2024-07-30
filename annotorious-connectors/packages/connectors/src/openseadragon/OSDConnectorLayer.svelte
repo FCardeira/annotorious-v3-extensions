@@ -1,13 +1,19 @@
 <script lang="ts">
-  import type OpenSeadragon from 'openseadragon';
+  import OpenSeadragon from 'openseadragon';
   import type { SvelteImageAnnotatorState } from '@annotorious/annotorious';
   import type { ImageAnnotation } from '@annotorious/openseadragon';
   import ConnectorLayer from '../ConnectorLayer/ConnectorLayer.svelte';
   import OSDSVGLayer from './OSDSVGLayer.svelte';
+  import type { Point } from 'src/model';
 
   export let source: ImageAnnotation | undefined;
   export let state: SvelteImageAnnotatorState;
   export let viewer: OpenSeadragon.Viewer;
+
+  const pointerTransform = (point: Point): Point => {
+    const {x, y} = viewer.viewport.viewerElementToImageCoordinates(new OpenSeadragon.Point(point.x, point.y));
+    return { x, y };
+  }
 </script>
 
 <OSDSVGLayer 
@@ -19,6 +25,6 @@
     scale={scale}
     source={source}
     state={state} 
-    transform={transform} />
-
+    layerTransform={transform} 
+    pointerTransform={pointerTransform} />
 </OSDSVGLayer>

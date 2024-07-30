@@ -4,14 +4,15 @@
   import { getSVGPoint } from '@annotorious/annotorious';
   import type { Annotation, ImageAnnotation, StoreChangeEvent, SvelteImageAnnotatorState } from '@annotorious/annotorious';
   import { getConnection } from '../layout';
-  import type { Connection, ConnectionAnnotation, ConnectionHandle, PinnedConnectionHandle } from '../model';
+  import type { Connection, ConnectionAnnotation, ConnectionHandle, PinnedConnectionHandle, Point } from '../model';
   import Connector from './Connector.svelte';
   import RubberbandConnector from './RubberbandConnector.svelte';
 
   /** Props */
   export let source: ImageAnnotation | undefined;
   export let state: SvelteImageAnnotatorState;
-  export let transform: string | undefined = undefined;
+  export let layerTransform: string | undefined = undefined;
+  export let pointerTransform: ((point: Point) => Point) | undefined = undefined;
   export let scale = 1;
 
   /** Responsive scaling **/
@@ -56,7 +57,9 @@
   const onPointerMove = (evt: PointerEvent) => {
     if (!source) return;
 
-    const pt = getSVGPoint(evt, svgEl);
+    const pt: Point = pointerTransform 
+      ? pointerTransform({ x: evt.offsetX, y: evt.offsetY })
+      : getSVGPoint(evt, svgEl);
 
     const target = store.getAt(pt.x, pt.y);
     if (target)
@@ -91,7 +94,7 @@
   class:active={source}
   on:pointermove={onPointerMove}
   on:pointerdown={onPointerDown}>
-  <g class="a9s-connectors" transform={transform}>
+  <g class="a9s-connectors" transform={layerTransform}>
     {#each connections as connection}
       <Connector
         annotation={connection}
@@ -99,14 +102,16 @@
         state={state} 
         isSelected={isSelected(connection.id)}/>
     {/each}
-  </g>
 
-  {#if connection}
-    <g class="a9s-rubberband">
-      <RubberbandConnector 
-        connection={connection} />
-    </g>
-  {/if}
+
+    {#if connection}
+      <g class="a9s-rubberband">
+        <RubberbandConnector 
+          connection={connection} 
+          scale={scale} />
+      </g>
+    {/if}
+  </g>
 </svg>
 
 <style>

@@ -110,11 +110,15 @@
             mode = 'RELATIONS';
             button.innerHTML = 'Mode: Relations';
 
-            // Disable drawing
+            // Disable drawing and enable connectors
             anno.setDrawingEnabled(false);
+            connectors.setEnabled(true);
           } else {
             mode = 'MOVE';
             button.innerHTML = 'Mode: Move';
+
+            // Disable connectors
+            connectors.setEnabled(false);
           }
         });
       }
