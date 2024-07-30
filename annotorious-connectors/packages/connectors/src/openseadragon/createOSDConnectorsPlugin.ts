@@ -22,6 +22,10 @@ export const mountOSDPlugin = (anno: ImageAnnotator, viewer: OpenSeadragon.Viewe
     }
   });
 
+  connectorLayer.$on('create', () => {
+    connectorLayer.$set(({ source: undefined }));
+  })
+
   const unsubscribe = selection.subscribe(({ selected }) => {
     if (isEnabled && selected.length > 0) {
       const source = store.getAnnotation(selected[0].id);

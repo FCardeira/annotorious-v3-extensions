@@ -26,5 +26,6 @@
     source={source}
     state={state} 
     layerTransform={transform} 
-    pointerTransform={pointerTransform} />
+    pointerTransform={pointerTransform}
+    on:create />
 </OSDSVGLayer>

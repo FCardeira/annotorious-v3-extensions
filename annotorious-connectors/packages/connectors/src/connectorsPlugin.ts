@@ -20,8 +20,10 @@ export const mountPlugin = (anno: ImageAnnotator) => {
   });
 
   const unsubscribe = selection.subscribe(({ selected }) => {
+    console.log('select', selected);
     if (isEnabled && selected.length > 0) {
       const source = store.getAnnotation(selected[0].id);
+      console.log('new source', source);
       connectorLayer.$set(({ source }));
     }
   });

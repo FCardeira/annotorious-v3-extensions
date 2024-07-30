@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { createEventDispatcher, onMount } from 'svelte';
   import { v4 as uuidv4 } from 'uuid';
   import { getSVGPoint } from '@annotorious/annotorious';
   import type { Annotation, ImageAnnotation, StoreChangeEvent, SvelteImageAnnotatorState } from '@annotorious/annotorious';
@@ -8,6 +8,8 @@
   import Connector from './Connector.svelte';
   import RubberbandConnector from './RubberbandConnector.svelte';
 
+	const dispatch = createEventDispatcher<{ create: ConnectionAnnotation }>();
+
   /** Props */
   export let source: ImageAnnotation | undefined;
   export let state: SvelteImageAnnotatorState;
@@ -15,22 +17,23 @@
   export let pointerTransform: ((point: Point) => Point) | undefined = undefined;
   export let scale = 1;
 
+  $: if (!source) connection = undefined;
+
   /** Responsive scaling **/
   let svgEl: SVGSVGElement;
-
   let connections: ConnectionAnnotation[] = [];
-
   let connection: Connection | undefined;
-
-  $: if (!source) connection = undefined;
 
   const { selection, store } = state;
 
   const isPinned = (handle?: ConnectionHandle): handle is PinnedConnectionHandle => 
     handle !== undefined && 'direction' in handle;
 
-  const onPointerDown = () => {
+  const onPointerDown = (evt: PointerEvent) => {
     if (isPinned(connection?.end)) {
+      evt.preventDefault();
+      evt.stopPropagation();
+
       const from = connection.start.annotation.id;
       const to = connection.end.annotation.id;
 
@@ -49,8 +52,7 @@
       // @ts-ignore
       store.addAnnotation(annotation);
 
-      source = undefined;
-      connection = undefined;
+      dispatch('create', annotation);
     }
   }
 
