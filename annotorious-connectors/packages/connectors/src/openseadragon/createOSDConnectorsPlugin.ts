@@ -1,11 +1,11 @@
 import type OpenSeadragon from 'openseadragon';
+import { UserSelectAction } from '@annotorious/openseadragon';
 import OSDConnectorLayer from './OSDConnectorLayer.svelte';
 import type { 
   ImageAnnotation,
   ImageAnnotator,
   SvelteImageAnnotatorState
 } from '@annotorious/annotorious';
-import { UserSelectAction } from '@annotorious/openseadragon';
 
 export const mountOSDPlugin = (anno: ImageAnnotator, viewer: OpenSeadragon.Viewer) => {
 
@@ -22,9 +22,7 @@ export const mountOSDPlugin = (anno: ImageAnnotator, viewer: OpenSeadragon.Viewe
     }
   });
 
-  connectorLayer.$on('create', () => {
-    connectorLayer.$set(({ source: undefined }));
-  })
+  connectorLayer.$on('create', () => connectorLayer.$set(({ source: undefined })));
 
   const unsubscribe = selection.subscribe(({ selected }) => {
     if (isEnabled && selected.length > 0) {
@@ -37,15 +35,18 @@ export const mountOSDPlugin = (anno: ImageAnnotator, viewer: OpenSeadragon.Viewe
 
   const setEnabled = (enabled: boolean) => {
     isEnabled = enabled;
+
     connectorLayer.$set({ source: undefined });
 
-    // TODO need to revert to the original setting afterwards
-    anno.setUserSelectAction(UserSelectAction.SELECT);
+    // TODO this should actually revert to the last
+    // action set by the host application. (But how?)
+    if (enabled)
+      anno.setUserSelectAction(UserSelectAction.SELECT);
+    else 
+      anno.setUserSelectAction(UserSelectAction.EDIT);
   }
 
-  const unmount = () => {
-    unsubscribe();
-  }
+  const unmount = () => unsubscribe();
 
   return { 
     setEnabled,
