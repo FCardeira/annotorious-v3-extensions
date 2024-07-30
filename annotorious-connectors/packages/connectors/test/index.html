@@ -53,7 +53,6 @@
         anno.loadAnnotations('./annotations.w3c.json');
         
         anno.on('createAnnotation', annotation => console.log('created', annotation));
-
         anno.on('selectionChanged', selected => console.log(selected));
 
         const connectors = mountPlugin(anno);

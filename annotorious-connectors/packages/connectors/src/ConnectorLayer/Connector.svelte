@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import type { ImageAnnotation, StoreChangeEvent, SvelteImageAnnotatorState } from '@annotorious/annotorious';
+  import type { SvelteImageAnnotatorState } from '@annotorious/annotorious';
   import { computePath, getConnection } from '../layout';
   import type { ConnectionAnnotation } from 'src/model';
 
@@ -8,8 +8,11 @@
   export let annotation: ConnectionAnnotation;
   export let state: SvelteImageAnnotatorState;
   export let isSelected: boolean;
+  export let scale: number;
 
   const { selection, store } = state;
+
+  $: r = 5 / scale;
 
   const computeConnection = (annotation: ConnectionAnnotation) =>
     getConnection(
@@ -45,11 +48,11 @@
     <path class="a9s-connector-path-outer" d={path.d} />  
     <path class="a9s-connector-path-inner" d={path.d} />
 
-    <circle class="a9s-connector-handle-outer" cx={path.start.x} cy={path.start.y} r="4"/>
-    <circle class="a9s-connector-handle-inner" cx={path.start.x} cy={path.start.y} r="4"/>
+    <circle class="a9s-connector-handle-outer" cx={path.start.x} cy={path.start.y} r={r} />
+    <circle class="a9s-connector-handle-inner" cx={path.start.x} cy={path.start.y} r={r} />
 
-    <circle class="a9s-connector-handle-outer" cx={path.end.x} cy={path.end.y} r="4" />
-    <circle class="a9s-connector-handle-inner" cx={path.end.x} cy={path.end.y} r="4" />
+    <circle class="a9s-connector-handle-outer" cx={path.end.x} cy={path.end.y} r={r} />
+    <circle class="a9s-connector-handle-inner" cx={path.end.x} cy={path.end.y} r={r} />
   {/if}
 </g>
 
@@ -58,6 +61,7 @@
     fill: transparent;
     stroke-linecap: round;
     stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
   }
 
   path.a9s-connector-path-buffer {
@@ -91,11 +95,13 @@
     fill: #00000040;
     stroke: #00000040;
     stroke-width: 3;
+    vector-effect: non-scaling-stroke;
   }
 
   circle.a9s-connector-handle-inner {
     stroke: #fff;
     stroke-width: 1.5;
     fill: #000;
+    vector-effect: non-scaling-stroke;
   }
 </style>

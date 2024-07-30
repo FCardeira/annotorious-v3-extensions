@@ -11,6 +11,8 @@
   /** Props */
   export let source: ImageAnnotation | undefined;
   export let state: SvelteImageAnnotatorState;
+  export let transform: string | undefined = undefined;
+  export let scale = 1;
 
   /** Responsive scaling **/
   let svgEl: SVGSVGElement;
@@ -89,10 +91,11 @@
   class:active={source}
   on:pointermove={onPointerMove}
   on:pointerdown={onPointerDown}>
-  <g class="a9s-connectors">
+  <g class="a9s-connectors" transform={transform}>
     {#each connections as connection}
       <Connector
         annotation={connection}
+        scale={scale}
         state={state} 
         isSelected={isSelected(connection.id)}/>
     {/each}
