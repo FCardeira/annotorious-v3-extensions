@@ -3,8 +3,6 @@ import react from '@vitejs/plugin-react';
 import tsConfigPaths from 'vite-tsconfig-paths';
 import dts from 'vite-plugin-dts';
 
-import * as packageJson from './package.json';
-
 export default defineConfig({
   plugins: [
     react(),

@@ -20,7 +20,9 @@
     "vite-tsconfig-paths": "^4.3.2"
   },
   "peerDependencies": {
-    "openseadragon": "^3.0.0 || ^4.0.0"
+    "openseadragon": "^3.0.0 || ^4.0.0",
+    "react": "16.8.0 || >=17.x || >=18.x",
+    "react-dom": "16.8.0 || >=17.x || >=18.x"
   },
   "peerDependenciesMeta": {
     "openseadragon": {
@@ -29,7 +31,7 @@
   },
   "dependencies": {
     "@annotorious/plugin-connectors": "0.1.0",
-    "@annotorious/react": "^3.0.0-rc.31"
+    "@annotorious/react": "file:../../../../annotorious/packages/annotorious-react"
   },
   "sideEffects": false
 }

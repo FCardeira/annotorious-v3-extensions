@@ -9,6 +9,7 @@ import { W3CImageRelationFormat } from '@annotorious/plugin-connectors';
 import { OSDConnectorPlugin} from '../../src';
 
 import '@annotorious/openseadragon/annotorious-openseadragon.css';
+import '@annotorious/plugin-connectors/annotorious-connectors.css';
 
 const IIIF_SAMPLE = {
   "@context" : "http://iiif.io/api/image/2/context.json",
@@ -51,6 +52,8 @@ export const App = () => {
 
   const anno = useAnnotator<AnnotoriousOpenSeadragonAnnotator>();
 
+  const [relationsEnabled, setRelationsEnabled] = useState(false);
+
   useEffect(() => {
     if (!anno) return;
 
@@ -66,6 +69,7 @@ export const App = () => {
     if (!anno) return;
 
     anno.setDrawingEnabled(mode === 'ANNOTATE');
+    setRelationsEnabled(mode === 'RELATIONS');
   }, [anno, mode]);
 
   return (
@@ -83,7 +87,9 @@ export const App = () => {
 
         <OpenSeadragonViewer className="openseadragon" options={OSD_OPTIONS} />
         
-        <OSDConnectorPlugin />
+        <OSDConnectorPlugin 
+          enabled={relationsEnabled} />
+
       </OpenSeadragonAnnotator>
     </div>
   )
