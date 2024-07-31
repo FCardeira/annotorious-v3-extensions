@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { W3CImageRelationFormat } from '@annotorious/plugin-connectors'; 
 import { 
   AnnotoriousOpenSeadragonAnnotator, 
   OpenSeadragonAnnotator, 
   OpenSeadragonViewer, 
   useAnnotator,
 } from '@annotorious/react';
+import { W3CImageRelationFormat } from '@annotorious/plugin-connectors'; 
+import { OSDConnectorPlugin} from '../../src';
 
 import '@annotorious/openseadragon/annotorious-openseadragon.css';
 
@@ -82,6 +83,7 @@ export const App = () => {
 
         <OpenSeadragonViewer className="openseadragon" options={OSD_OPTIONS} />
         
+        <OSDConnectorPlugin />
       </OpenSeadragonAnnotator>
     </div>
   )
